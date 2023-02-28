@@ -1,0 +1,60 @@
+.input__field {
+  width: 100%;
+  height: 40px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid silver;
+  border-radius: 3px;
+}
+
+.select__field {
+  width: 100%;
+  height: 40px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid silver;
+  border-radius: 3px;
+}
+
+.btn__submit {
+  width: 50%;
+  padding: 8px;
+}
+
+.btn__submit:disabled {
+  background-color: silver;
+  color: white;
+  cursor: not-allowed;
+}
+
+.custom-file-input {
+  color: transparent;
+}
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: '+';
+  // width: 100px;
+  padding: 24px 34px;
+  color: var(--primary);
+  display: inline-block;
+  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 2px dotted var(--primary);
+  border-radius: 3px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 20pt;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active {
+  outline: 0;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}

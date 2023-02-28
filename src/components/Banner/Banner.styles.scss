@@ -1,0 +1,17 @@
+.owl-theme {
+  max-height: 240px;
+  .owl-dots {
+    position: relative;
+    bottom: 40px;
+    .owl-dot {
+      padding: 0 5px;
+      background: none;
+      border: none;
+      span {
+        width: 6px !important;
+        height: 6px !important;
+        margin: 0 !important;
+      }
+    }
+  }
+}
