@@ -40,7 +40,27 @@ export const getUserApi = async (id: any) => {
   return await axiosClient.get(url);
 };
 
+export const getChatApi = async (id: any) => {
+  const url = `/api/chat/${id}`;
+  return await axiosClient.get(url);
+};
+
+export const getChatByUserApi = async (id: any) => {
+  const url = `/api/chat/user/${id}`;
+  return await axiosClient.get(url);
+};
+
 export const getMessagesApi = async (id: any) => {
   const url = `/api/message/${id}`;
   return await axiosClient.get(url);
+};
+
+export const getLastMessagesApi = async (id: any) => {
+  const url = `/api/message/last/${id}`;
+  return await axiosClient.get(url);
+};
+
+export const sendMessageApi = async (data: any) => {
+  const url = '/api/message';
+  return await axiosClient.post(url, data);
 };

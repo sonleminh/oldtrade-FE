@@ -1,0 +1,29 @@
+.slick-prev {
+  left: 0;
+  border-radius: 0 5px 5px 0;
+}
+
+.slick-next {
+  right: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.slick-dots {
+  bottom: 10px;
+  li {
+    button {
+      width: 10px;
+      height: 10px;
+      background-color: #eaebec;
+      border-radius: 50%;
+      &::before {
+        content: none;
+      }
+    }
+  }
+}
+
+.slick-dots .slick-active button {
+  background-color: black;
+  opacity: 0.7;
+}

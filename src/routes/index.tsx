@@ -40,10 +40,10 @@ function Routers() {
           </Route>
         </React.Fragment>
       ) : (
-        <React.Fragment>
+        <Route path='/' element={<DefaultLayout />}>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
-        </React.Fragment>
+        </Route>
       )}
     </Routes>
   );

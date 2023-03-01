@@ -46,8 +46,6 @@ const PostDetail = () => {
     getPostById();
   }, []);
 
-  console.log(post);
-
   var settings = {
     dots: true,
     infinite: true,

@@ -8,13 +8,28 @@ import {
   Icon,
   Flex,
   Input,
+  Image,
+  Button,
 } from '@chakra-ui/react';
 import { FaUserCircle, FaTrashAlt, FaPlusCircle } from 'react-icons/fa';
 import { AiOutlineSend } from 'react-icons/ai';
 import React, { useEffect, useState } from 'react';
 import axiosClient from '../../api/axiosClient';
 import Conversation from '../../components/Conversation';
-import { getMessagesApi, getUserApi } from '../../Redux/apiRequest';
+import {
+  getChatApi,
+  getChatByUserApi,
+  getMessagesApi,
+  getUserApi,
+  sendMessageApi,
+} from '../../Redux/apiRequest';
+
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
+import './Chat.styles.scss';
+import Message from '../../components/Message';
+import { transform } from 'typescript';
 
 interface Props {
   user: any;
@@ -22,29 +37,31 @@ interface Props {
 
 const Chat: React.FC<Props> = (props) => {
   const [currentChat, setCurrentChat] = useState<any>();
-  const [conversation, setConversation] = useState<any>();
+  const [chat, setChat] = useState<any>();
   const [friend, setFriend] = useState<any>();
   const [messages, setMessages] = useState<any>();
+  const [newMessage, setNewMessage] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
   const { user } = props;
 
   useEffect(() => {
-    const getConversation = async () => {
+    const getChat = async () => {
       try {
-        const response: any = await axiosClient.get(
-          `/api/conversation/${user._id}`
-        );
-        setConversation(response);
+        const response: any = await getChatByUserApi(user._id);
+        setChat(response);
       } catch (error) {
-        console.log('Failed to get conversation: ', error);
+        console.log('Failed to get chat: ', error);
       }
     };
-    getConversation();
-  }, [user._id]);
+    getChat();
+  }, [user._id, loading]);
 
-  const handleCurrentChat = async (currentChat: any) => {
-    const friendId = currentChat?.members.find((m: any) => m !== user._id);
-    const response: any = await getUserApi(friendId);
-    setCurrentChat(response);
+  const handleCurrentChat = async (chatData: any) => {
+    const friendId = chatData?.members.find((m: any) => m !== user._id);
+    const friendData: any = await getUserApi(friendId);
+    setFriend(friendData);
+    const chat: any = await getChatApi(chatData._id);
+    setCurrentChat(chat);
   };
 
   useEffect(() => {
@@ -59,6 +76,45 @@ const Chat: React.FC<Props> = (props) => {
     getMesages();
   }, [currentChat]);
 
+  var settings = {
+    dots: true,
+    infinite: true,
+    rewind: true,
+    autoplay: true,
+    arrows: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
+  const handeSendMessage = async (e: any) => {
+    const message = {
+      conversationId: currentChat._id,
+      sender: user._id,
+      text: newMessage,
+    };
+    try {
+      const response = await sendMessageApi(message);
+      setMessages([...messages, response]);
+      setLoading(!loading);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleKeyDown = (e: any) => {
+    const message = {
+      conversationId: currentChat._id,
+      sender: user._id,
+      text: newMessage,
+    };
+    if (e.key === 'Enter') {
+      // 👇 Get input value
+      handeSendMessage(message);
+      setNewMessage('');
+    }
+  };
+
   return (
     <Box h='calc(100vh - 100px)' bg='#f4f4f4' overflow='hidden'>
       <Container w={'936px'} m='0 auto' bg='white'>
@@ -68,7 +124,7 @@ const Chat: React.FC<Props> = (props) => {
               Chat
             </Text>
             <Box h='520px' overflowY={'scroll'}>
-              {conversation?.map((item: any, index: number) => (
+              {chat?.map((item: any, index: number) => (
                 <Box
                   onClick={() => handleCurrentChat(item)}
                   key={index}
@@ -89,68 +145,110 @@ const Chat: React.FC<Props> = (props) => {
             </Flex>
           </GridItem>
           <GridItem colSpan={3}>
-            {!currentChat }
-            <React.Fragment>
-              <Flex
-                mr='5px'
-                p='15px'
-                alignItems={'center'}
-                borderBottom='1px solid #ececec'>
-                <Icon as={FaUserCircle} m='0 10px 0 5px' p='0' fontSize='30px' />
-                <Flex flexDirection={'column'}>
-                  <Text fontSize={'15px'} fontWeight={'600'}>
-                    {friend?.name}
-                  </Text>
-                  <Text fontSize={'12px'}>Đang hoạt động</Text>
-                </Flex>
-              </Flex>
-              <Box h='495px' pt='20px' overflowY={'scroll'}>
-                <Flex>
-                  <Flex
-                    maxW='65%'
-                    m='15px 10px'
-                    p='10px 12px'
-                    bg='#f4f4f4'
-                    borderRadius={'8px'}
-                    flexDirection='column'>
-                    <Text mb='5px' color='#222' fontSize={'15px'}>
-                      Điện thoại này còn không?
+            {!friend ? (
+              <Box textAlign={'center'} mt='70px' position={'relative'}>
+                <Slider {...settings}>
+                  <Box maxW='370px'>
+                    <Image
+                      src={require('../../assets/image/chat-banner2.png')}
+                      mx='auto'
+                      boxSize='370px'
+                      objectFit={'contain'}
+                    />
+                    <Text
+                      position='relative'
+                      bottom='50px'
+                      color='#222'
+                      fontWeight={'700'}>
+                      Tích cực chat, chốc lát chốt đơn
                     </Text>
-                    <Text fontSize={'12px'} color='#bdc1c9'>
-                      10:59
+                  </Box>
+                  <Box maxW='370px'>
+                    <Image
+                      src={require('../../assets/image/chat-banner.png')}
+                      mx='auto'
+                      boxSize='370px'
+                      objectFit={'contain'}
+                    />
+                    <Text
+                      position='relative'
+                      bottom='40px'
+                      color='#222'
+                      fontWeight={'700'}>
+                      Mẹo! Chat giúp làm sáng tỏ thêm thông tin, tăng hiệu quả
+                      mua bán
                     </Text>
-                  </Flex>
-                </Flex>
-                <Flex justifyContent={'end'}>
-                  <Flex
-                    maxW='65%'
-                    m='15px 10px'
-                    p='10px 12px'
-                    bg='#f4f4f4'
-                    borderRadius={'8px'}
-                    flexDirection='column'
-                    textAlign='right'>
-                    <Text mb='5px' color='#222' fontSize={'15px'}>
-                      Vẫn còn ạ aaaaaaaaaaaaaaaaaaaaa
-                    </Text>
-                    <Text fontSize={'12px'} color='#bdc1c9'>
-                      10:59
-                    </Text>
-                  </Flex>
-                </Flex>
+                  </Box>
+                </Slider>
               </Box>
-              <Flex p='10px 10px' alignItems={'center'}>
-                <Icon as={FaPlusCircle} m='0 10px 0 5px' p='0' fontSize='20px' />
-                <Input
-                  placeholder='Nhập tin nhắn'
-                  w='100%'
-                  h='30px'
-                  border='none'
-                  borderRadius={'20px'}
-                  bg='#f4f4f4'></Input>
-                <Icon as={AiOutlineSend} m='0 10px 0 5px' p='0' fontSize='20px' />
-              </Flex>
-            </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Flex
+                  mr='5px'
+                  p='15px'
+                  alignItems={'center'}
+                  borderBottom='1px solid #ececec'>
+                  <Icon
+                    as={FaUserCircle}
+                    m='0 10px 0 5px'
+                    p='0'
+                    fontSize='30px'
+                  />
+                  <Flex flexDirection={'column'}>
+                    <Text fontSize={'15px'} fontWeight={'600'}>
+                      {friend.name}
+                    </Text>
+                    <Text fontSize={'12px'}>Đang hoạt động</Text>
+                  </Flex>
+                </Flex>
+                <Box h='500px' pt='20px' overflowY={'scroll'}>
+                  {messages?.map((item: any, index: number) => (
+                    <Message
+                      key={index}
+                      message={item}
+                      own={item?.sender === user._id}
+                    />
+                  ))}
+                </Box>
+                <Flex p='10px 10px' alignItems={'center'}>
+                  <Icon
+                    as={FaPlusCircle}
+                    m='0 10px 0 5px'
+                    p='0'
+                    fontSize='20px'
+                  />
+                  <Input
+                    placeholder='Nhập tin nhắn'
+                    w='100%'
+                    h='30px'
+                    px='10px'
+                    border='none'
+                    borderRadius={'20px'}
+                    outline='none'
+                    bg='#f4f4f4'
+                    onKeyDown={handleKeyDown}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    value={newMessage}
+                  />
+                  <Button
+                    onClick={(e) => handeSendMessage(e)}
+                    bg='none'
+                    color={newMessage ? 'var(--primary)' : '#333'}
+                    transition='transform 0.2s'
+                    _hover={{
+                      bg: 'none',
+                      transform: 'scale(1.2)',
+                    }}>
+                    <Icon
+                      as={AiOutlineSend}
+                      m='0 10px 0 5px'
+                      p='0'
+                      fontSize='20px'
+                    />
+                  </Button>
+                </Flex>
+              </React.Fragment>
+            )}
           </GridItem>
         </Grid>
       </Container>

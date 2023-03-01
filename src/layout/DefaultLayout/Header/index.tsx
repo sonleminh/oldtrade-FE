@@ -26,7 +26,7 @@ import {
 } from 'react-icons/fa';
 import { BiLogOut } from 'react-icons/bi';
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../Redux/hooks';
 import { logout } from '../../../Redux/slice/userSlice';
 import moment from 'moment';
@@ -43,10 +43,23 @@ const Header = () => {
   const navigate = useNavigate();
 
   let searchRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  let menuRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   useEffect(() => {
     let handle = (e: any) => {
       if (!searchRef.current.contains(e.target)) {
+        setShowSearchResult(false);
+      }
+    };
+    document.addEventListener('mousedown', handle);
+    return () => {
+      document.removeEventListener('mousedown', handle);
+    };
+  }, []);
+
+  useEffect(() => {
+    let handle = (e: any) => {
+      if (!menuRef.current.contains(e.target)) {
         setShow(false);
       }
     };
@@ -54,19 +67,19 @@ const Header = () => {
     return () => {
       document.removeEventListener('mousedown', handle);
     };
-  }, [searchRef]);
+  }, []);
 
   const search = (e: any) => {
     if (!e.target.value) return setShowSearchResult(false);
     setShowSearchResult(true);
     setSearchResult(
-      posts.posts.filter((item: any) => {
+      posts.filter((item: any) => {
         return item.title.toLowerCase().includes(e.target.value.toLowerCase());
       })
     );
   };
 
-  const handleLogout = () => {
+  const handleLogout = (e: any) => {
     dispatch(logout());
     navigate('/');
   };
@@ -94,7 +107,7 @@ const Header = () => {
                     Trang chủ
                   </Flex>
                 </Link>
-                <Link to='/quan-ly-tin'>
+                <Link to={user._id ? '/quan-ly-tin' : '/login'}>
                   <Flex
                     color={'white'}
                     alignItems='center'
@@ -110,7 +123,7 @@ const Header = () => {
                     Quản lý tin
                   </Flex>
                 </Link>
-                <Link to='chat'>
+                <Link to={user._id ? 'chat' : 'login'}>
                   <Flex
                     color={'white'}
                     alignItems='center'
@@ -133,7 +146,7 @@ const Header = () => {
                   </Flex>
                 </Link>
 
-                <Flex alignItems={'center'} ref={searchRef}>
+                <Flex alignItems={'center'} ref={menuRef}>
                   {!user.name ? (
                     <Link
                       to='/login'
@@ -219,7 +232,7 @@ const Header = () => {
               </Flex>
             </HStack>
             <HStack w='100%' h='48px' alignItems={'start'}>
-              <InputGroup alignItems={'center'}>
+              <InputGroup alignItems={'center'} ref={searchRef}>
                 <Input
                   variant='unstyled'
                   placeholder='Tìm kiếm trên OldTrade'
@@ -227,7 +240,6 @@ const Header = () => {
                   w={'calc(100% - 15px)'}
                   h='36px'
                   p='0 10px'
-                  // mr={'15px'}
                   border='none'
                   outline={'none'}
                   borderRadius={'5px'}
