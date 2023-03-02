@@ -44,7 +44,7 @@ const PostDetail = () => {
       }
     };
     getPostById();
-  }, []);
+  }, [id]);
 
   var settings = {
     dots: true,
@@ -211,7 +211,7 @@ const PostDetail = () => {
                   <Text mb='7px'>
                     Đi cùng 1 người bạn hiểu biết về sản phẩm khi giao dịch.
                   </Text>
-                  <a href='#'>Tìm hiểu thêm</a>
+                  <a href='/'>Tìm hiểu thêm</a>
                 </Box>
               </Flex>
             </GridItem>

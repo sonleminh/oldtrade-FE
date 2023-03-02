@@ -19,7 +19,6 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { registerApi } from '../../../Redux/apiRequest';
-import axiosClient from '../../../api/axiosClient';
 import emailjs from '@emailjs/browser';
 
 const BACKGROUND = require('../../../assets/image/login_desktop_background.webp');

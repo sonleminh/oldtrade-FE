@@ -6,19 +6,16 @@ import {
   Text,
   Grid,
   GridItem,
-  Icon,
   Button,
   UnorderedList,
   ListItem,
 } from '@chakra-ui/react';
-import { BsDot } from 'react-icons/bs';
 import React, { useState, useEffect } from 'react';
 import Banner from '../../components/Banner';
 import { getAllPostApi } from '../../Redux/apiRequest';
-import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { useAppDispatch } from '../../Redux/hooks';
 import { getAllPost } from '../../Redux/slice/postSlice';
+import PostCard from '../../components/PostCard';
 
 const Homepage = () => {
   const [postList, setPostList] = useState<any>();
@@ -35,7 +32,9 @@ const Homepage = () => {
       }
     };
     getPosts();
-  }, []);
+  }, [dispatch]);
+
+  console.log('c', postList);
 
   const headerCategory = [
     {
@@ -205,48 +204,7 @@ const Homepage = () => {
           <Grid templateColumns='repeat(5, 1fr)'>
             {postList?.map((item: any, index: number) => (
               <GridItem key={index} w='100%'>
-                <Link to={`post/${item._id}`}>
-                  <Box p={'13px'}>
-                    <Image
-                      src={item.image[0]?.url}
-                      alt='icon'
-                      boxSize='166px'
-                      borderRadius={'2px'}
-                      objectFit='cover'
-                    />
-                    <Text
-                      h={'36px'}
-                      m='5px auto'
-                      overflow={'hidden'}
-                      textOverflow='ellipsis'
-                      lineHeight={'18px'}
-                      textAlign={'start'}
-                      fontSize={'14px'}>
-                      {item.title}
-                    </Text>
-                    <Text
-                      textAlign={'start'}
-                      color='#d0021b'
-                      fontSize={'15px'}
-                      fontWeight='700'>
-                      {item.price
-                        ?.toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}{' '}
-                      đ
-                    </Text>
-                    <Flex
-                      m={'10px 0'}
-                      fontSize={'10px'}
-                      color={'#9b9b9b'}
-                      alignItems='center'>
-                      <Image src='user-icon.svg' alt='icon' w={'16px'} />
-                      <Icon as={BsDot} fontSize='10px' />
-                      <Text>{moment(item.createdAt).fromNow()}</Text>
-                      <Icon as={BsDot} fontSize='10px' />
-                      <Text>TP Hồ Chí Minh</Text>
-                    </Flex>
-                  </Box>
-                </Link>
+                <PostCard item={item} />
               </GridItem>
             ))}
           </Grid>

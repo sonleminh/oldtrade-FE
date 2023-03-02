@@ -81,7 +81,7 @@ const Header = () => {
 
   const handleLogout = (e: any) => {
     dispatch(logout());
-    navigate('/');
+    navigate('/login');
   };
 
   return (
@@ -189,12 +189,12 @@ const Header = () => {
                           listStyleType='none'
                           textAlign={'left'}
                           zIndex='69'>
-                          <ListItem
-                            p={'10px 20px'}
-                            _hover={{
-                              bg: '#E8E8E8',
-                            }}>
-                            <Link to='profile'>
+                          <Link to='profile'>
+                            <ListItem
+                              p={'10px 20px'}
+                              _hover={{
+                                bg: '#E8E8E8',
+                              }}>
                               <Flex alignItems={'center'} cursor='pointer'>
                                 <Icon
                                   as={FaUserCircle}
@@ -204,8 +204,8 @@ const Header = () => {
                                 />
                                 <Text color='#222222'>Tài khoản</Text>
                               </Flex>
-                            </Link>
-                          </ListItem>
+                            </ListItem>
+                          </Link>
                           <ListItem
                             onClick={handleLogout}
                             p={'10px 20px'}

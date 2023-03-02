@@ -94,7 +94,7 @@ const Post: React.FC<Props> = (props) => {
   };
   useEffect(() => {
     dispatch(unLoadding());
-  }, [isLoad]);
+  }, [isLoad, dispatch]);
 
   useEffect(() => {
     const getLocalData = async () => {
@@ -202,29 +202,6 @@ const Post: React.FC<Props> = (props) => {
                     </Box>
                   </GridItem>
                 ))}
-                {/* {imageList.map((url: string, index: number) => (
-                  <GridItem colSpan={1} key={index}>
-                    <Flex
-                      position='relative'
-                      border={'1px solid #ddd'}
-                      justifyContent='center'
-                      m='auto 0'
-                      alignItems={'center'}>
-                      <Image boxSize='68px' objectFit={'cover'} src={url} />
-                      <Icon
-                        as={FaTimes}
-                        position='absolute'
-                        top='-9px'
-                        right='-11px'
-                        p='5px'
-                        bg='black'
-                        color='white'
-                        borderRadius={'50%'}
-                        fontSize='20px'
-                      />
-                    </Flex>
-                  </GridItem>
-                ))} */}
               </Grid>
             </GridItem>
             <GridItem colSpan={4} px='30px' h='100%'>
@@ -248,7 +225,6 @@ const Post: React.FC<Props> = (props) => {
                           as='select'
                           id='category'
                           name='category'
-                          // type='text'
                           className='input__field'
                           required>
                           <option value='' disabled selected>

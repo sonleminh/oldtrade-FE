@@ -45,7 +45,7 @@ const UserPost: React.FC<Props> = (props) => {
       }
     };
     getPostByUser();
-  }, [isLoad]);
+  }, [isLoad, user._id]);
 
   const handleDeletePost = async (id: any) => {
     try {

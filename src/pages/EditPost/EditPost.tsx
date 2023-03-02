@@ -436,7 +436,7 @@ function EditPost() {
       }
     };
     getPost();
-  }, []);
+  }, [id]);
   console.log(post);
 
   return (

@@ -44,7 +44,6 @@ const Login = () => {
       const response: any = await loginApi(values);
 
       const { _id, name, email, phone } = response;
-      dispatch(login({ _id, name, email, phone }));
 
       if (response.message === 'Email or password is incorrect') {
         toast.error('Sai email hoặc mật khẩu!', {
@@ -57,21 +56,7 @@ const Login = () => {
           progress: undefined,
           theme: 'light',
         });
-      }
-
-      if (response.verified === true) {
-        toast.success('Đăng nhập thành công!', {
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-        navigate('/');
-      } else {
+      } else if (response.verified === false) {
         toast.error(
           'Tài khoản chưa được xác minh, vui lòng kiểm tra lại email!',
           {
@@ -85,6 +70,19 @@ const Login = () => {
             theme: 'light',
           }
         );
+      } else {
+        toast.success('Đăng nhập thành công!', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+        dispatch(login({ _id, name, email, phone }));
+        navigate('/');
       }
     } catch (error) {
       const response = error.response.data;
