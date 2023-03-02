@@ -88,8 +88,8 @@ const Post: React.FC<Props> = (props) => {
         });
       }
     } catch (error) {
-      const response = error.response.data;
-      console.log(response.message);
+      const response = error?.response?.data;
+      console.log(response?.message);
     }
   };
   useEffect(() => {
