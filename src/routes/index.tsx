@@ -16,7 +16,7 @@ import { useAppSelector } from '../Redux/hooks';
 
 function Routers() {
   const user = useAppSelector((state) => state.user);
-  const posts = useAppSelector((state) => state.post.postList);
+  // const posts = useAppSelector((state) => state.post.postList);
 
   return (
     <Routes>

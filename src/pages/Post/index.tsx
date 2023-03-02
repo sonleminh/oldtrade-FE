@@ -12,7 +12,6 @@ import {
   Icon,
   Breadcrumb,
   BreadcrumbItem,
-  Select,
   HStack,
 } from '@chakra-ui/react';
 import { FaTimes } from 'react-icons/fa';
@@ -74,7 +73,6 @@ const Post: React.FC<Props> = (props) => {
           ward: wardId,
         },
       };
-      console.log(data);
 
       const response: any = await createPostApi(data);
       if (response.success === true) {

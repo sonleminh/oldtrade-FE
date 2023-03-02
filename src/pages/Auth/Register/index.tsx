@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { registerApi } from '../../../Redux/apiRequest';
 import axiosClient from '../../../api/axiosClient';
+import emailjs from '@emailjs/browser';
 
 const BACKGROUND = require('../../../assets/image/login_desktop_background.webp');
 
@@ -44,11 +45,20 @@ const Register = () => {
     try {
       const response: any = await registerApi(values);
       const web = `http://${window.location.host}/verify/${response.user._id}`;
-      await axiosClient.post('/api/email/send', {
-        email: response.user.email,
-        subject: 'Xác thực tài khoản',
-        content: `<span>Hi, cảm ơn vì đã tham gia Old Trade. Nhấn vào đường link sau để xác thực tài khoản của bạn. </span> <a href="${web}">Click Here</a>`,
-      });
+      const data: any = {
+        to_email: response.user.email,
+        html: `<a href="${web}">Click Here</a>`,
+      };
+      emailjs
+        .send('service_vnv5xsp', 'template_qjeivmn', data, 'Qf9ITTrnk9aqrKLBb')
+        .then(
+          (result) => {
+            console.log(result.text);
+          },
+          (error) => {
+            console.log(error.text);
+          }
+        );
       toast.success(
         'Đăng ký thành công!, vui lòng kiểm tra email để xác thực tài khoản!',
         {
@@ -63,8 +73,8 @@ const Register = () => {
         }
       );
     } catch (error) {
-      const response = error.response.data;
-      console.log(response.message);
+      const response = error.response?.data;
+      console.log(response?.message);
 
       if (response.message === 'This email already exists') {
         toast.error('Email đã tồn tại!', {

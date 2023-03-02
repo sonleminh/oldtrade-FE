@@ -4,7 +4,6 @@ import {
   Grid,
   GridItem,
   Text,
-  VStack,
   Icon,
   Flex,
   Input,
@@ -14,7 +13,6 @@ import {
 import { FaUserCircle, FaTrashAlt, FaPlusCircle } from 'react-icons/fa';
 import { AiOutlineSend } from 'react-icons/ai';
 import React, { useEffect, useState } from 'react';
-import axiosClient from '../../api/axiosClient';
 import Conversation from '../../components/Conversation';
 import {
   getChatApi,
@@ -29,7 +27,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import './Chat.styles.scss';
 import Message from '../../components/Message';
-import { transform } from 'typescript';
 
 interface Props {
   user: any;
