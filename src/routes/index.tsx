@@ -27,6 +27,7 @@ function Routers() {
         <Route path='/verify/:id' element={<Verify />} />
         <Route path='/user/:id' element={<UserProfile />} />
         <Route path='/danh-muc/:id' element={<PostByCategory />} />
+        <Route path='/post/:id' element={<PostDetail user={user} />} />
       </Route>
       {user._id ? (
         <React.Fragment>
