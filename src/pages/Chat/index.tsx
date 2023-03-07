@@ -10,10 +10,16 @@ import {
   Image,
   Button,
 } from '@chakra-ui/react';
-import { FaUserCircle, FaTrashAlt, FaPlusCircle } from 'react-icons/fa';
+import {
+  FaUserCircle,
+  FaTrashAlt,
+  FaPlusCircle,
+  FaCircle,
+} from 'react-icons/fa';
 import { AiOutlineSend } from 'react-icons/ai';
-import React, { useEffect, useState } from 'react';
-import Conversation from '../../components/Conversation';
+import React, { useEffect, useRef, useState } from 'react';
+import ChatInfo from './ChatInfo';
+
 import {
   getChatApi,
   getChatByUserApi,
@@ -26,40 +32,51 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import './Chat.styles.scss';
-import Message from '../../components/Message';
+import Message from './Message';
+import { io } from 'socket.io-client';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface Props {
   user: any;
 }
 
 const Chat: React.FC<Props> = (props) => {
+  const { user } = props;
+  let { id } = useParams();
+
   const [currentChat, setCurrentChat] = useState<any>();
   const [chat, setChat] = useState<any>();
   const [friend, setFriend] = useState<any>();
+  const [onlineUser, setOnlineUser] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<any>();
   const [newMessage, setNewMessage] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const { user } = props;
+  const [arrivalMessage, setArrivalMessage] = useState<any>();
+  const socket = useRef<any>();
+  const navigate = useNavigate();
+
+  const scrollRef: any = useRef();
+
+  // useEffect(() => {
+  //   socket.current = io('ws://localhost:9000');
+  // }, []);
 
   useEffect(() => {
-    const getChat = async () => {
-      try {
-        const response: any = await getChatByUserApi(user._id);
-        setChat(response);
-      } catch (error) {
-        console.log('Failed to get chat: ', error);
-      }
-    };
-    getChat();
-  }, [user._id, loading]);
+    socket.current = io('ws://localhost:9000');
+    socket.current.on('getMessage', (data: any) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
 
-  const handleCurrentChat = async (chatData: any) => {
-    const friendId = chatData?.members.find((m: any) => m !== user._id);
-    const friendData: any = await getUserApi(friendId);
-    setFriend(friendData);
-    const chat: any = await getChatApi(chatData._id);
-    setCurrentChat(chat);
-  };
+  useEffect(() => {
+    arrivalMessage &&
+      currentChat?.members.includes(arrivalMessage.sender) &&
+      setMessages((prev: any) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, currentChat]);
 
   useEffect(() => {
     const getMesages = async () => {
@@ -73,15 +90,64 @@ const Chat: React.FC<Props> = (props) => {
     getMesages();
   }, [currentChat]);
 
-  var settings = {
-    dots: true,
-    infinite: true,
-    rewind: true,
-    autoplay: true,
-    arrows: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
+  useEffect(() => {
+    socket?.current.emit('addUser', user._id);
+    // socket?.current.emit('addUser', friend?._id);
+    socket?.current.on('getUsers', (users: any) => {
+      setOnlineUser(users);
+    });
+  }, [user._id]);
+
+  useEffect(() => {
+    const getChat = async () => {
+      try {
+        const response: any = await getChatByUserApi(user._id);
+        setChat(response);
+      } catch (error) {
+        console.log('Failed to get chat: ', error);
+      }
+    };
+    getChat();
+  }, [user._id, loading]);
+
+  useEffect(() => {
+    const getCurrentChat = async () => {
+      try {
+        const response: any = await getChatApi(id);
+        setCurrentChat(response);
+      } catch (error) {
+        console.log('Failed to get chat: ', error);
+      }
+    };
+    getCurrentChat();
+  }, []);
+
+  useEffect(() => {
+    const getFriend = async () => {
+      try {
+        const friendId = currentChat?.members.find((m: any) => m !== user._id);
+
+        const friendData: any = await getUserApi(friendId);
+        setFriend(friendData);
+      } catch (error) {
+        console.log('Failed to get friend: ', error);
+      }
+    };
+    getFriend();
+  }, [currentChat]);
+
+  const checkOnline = onlineUser?.find(
+    (user: any) => user.userId === friend?._id
+  );
+
+  const handleCurrentChat = async (chatData: any) => {
+    const friendId = chatData?.members.find((m: any) => m !== user._id);
+    const friendData: any = await getUserApi(friendId);
+    setFriend(friendData);
+    const chat: any = await getChatApi(chatData._id);
+    setCurrentChat(chat);
+    // setNewMessage('');
+    navigate(`/chat/${chatData._id}`);
   };
 
   const handeSendMessage = async (e: any) => {
@@ -90,6 +156,13 @@ const Chat: React.FC<Props> = (props) => {
       sender: user._id,
       text: newMessage,
     };
+
+    socket.current.emit('sendMessage', {
+      senderId: user._id,
+      receiverId: friend._id,
+      text: newMessage,
+    });
+
     try {
       const response = await sendMessageApi(message);
       setMessages([...messages, response]);
@@ -106,10 +179,24 @@ const Chat: React.FC<Props> = (props) => {
       text: newMessage,
     };
     if (e.key === 'Enter') {
-      // 👇 Get input value
       handeSendMessage(message);
       setNewMessage('');
     }
+  };
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  var settings = {
+    dots: true,
+    infinite: true,
+    rewind: true,
+    autoplay: true,
+    arrows: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
   };
 
   return (
@@ -129,7 +216,7 @@ const Chat: React.FC<Props> = (props) => {
                   _hover={{
                     bg: '#f4f4f4',
                   }}>
-                  <Conversation user={user} conversation={item} />
+                  <ChatInfo user={user} conversation={item} />
                 </Box>
               ))}
             </Box>
@@ -142,6 +229,8 @@ const Chat: React.FC<Props> = (props) => {
             </Flex>
           </GridItem>
           <GridItem colSpan={3}>
+            {/* <ChatBox /> */}
+
             {!friend ? (
               <Box textAlign={'center'} mt='70px' position={'relative'}>
                 <Slider {...settings}>
@@ -179,7 +268,7 @@ const Chat: React.FC<Props> = (props) => {
                 </Slider>
               </Box>
             ) : (
-              <React.Fragment>
+              <p>
                 <Flex
                   mr='5px'
                   p='15px'
@@ -193,18 +282,34 @@ const Chat: React.FC<Props> = (props) => {
                   />
                   <Flex flexDirection={'column'}>
                     <Text fontSize={'15px'} fontWeight={'600'}>
-                      {friend.name}
+                      {friend?.name}
                     </Text>
-                    <Text fontSize={'12px'}>Đang hoạt động</Text>
+                    {typeof checkOnline !== 'undefined' ? (
+                      <Flex mt='2px' alignItems={'center'}>
+                        <Icon
+                          as={FaCircle}
+                          mr='8px'
+                          fontSize={'7px'}
+                          color='#589f39'>
+                          .
+                        </Icon>
+                        <Text fontSize={'12px'}>Đang hoạt động</Text>
+                      </Flex>
+                    ) : (
+                      <Flex mt='2px' alignItems={'center'}>
+                        <Icon as={FaCircle} mr='8px' fontSize={'7px'}>
+                          .
+                        </Icon>
+                        <Text fontSize={'12px'}>Không hoạt động</Text>
+                      </Flex>
+                    )}
                   </Flex>
                 </Flex>
                 <Box h='500px' pt='20px' overflowY={'scroll'}>
                   {messages?.map((item: any, index: number) => (
-                    <Message
-                      key={index}
-                      message={item}
-                      own={item?.sender === user._id}
-                    />
+                    <div ref={scrollRef} key={index}>
+                      <Message message={item} own={item?.sender === user._id} />
+                    </div>
                   ))}
                 </Box>
                 <Flex p='10px 10px' alignItems={'center'}>
@@ -244,7 +349,7 @@ const Chat: React.FC<Props> = (props) => {
                     />
                   </Button>
                 </Flex>
-              </React.Fragment>
+              </p>
             )}
           </GridItem>
         </Grid>

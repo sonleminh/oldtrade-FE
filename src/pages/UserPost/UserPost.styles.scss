@@ -13,7 +13,7 @@
 
 .modal {
   position: fixed;
-  z-index: 1000;
+  z-index: 68;
   top: 0;
   left: 0;
   width: 100%;
@@ -39,6 +39,7 @@
   background-color: white;
   width: 360px;
   border-radius: 3px;
+  z-index: 69;
 }
 
 .modal-header {

@@ -20,7 +20,7 @@ import * as Yup from 'yup';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Post.styles.scss';
-import { createPostApi } from '../../Redux/apiRequest';
+import { createPostApi, getCategoriesApi } from '../../Redux/apiRequest';
 import { toast } from 'react-toastify';
 import axiosClient from '../../api/axiosClient';
 import { useAppDispatch } from '../../Redux/hooks';
@@ -41,6 +41,7 @@ const Post: React.FC<Props> = (props) => {
   const [districtId, setDistrictId] = useState<any>('');
   const [wardId, setWardId] = useState<any>('');
   const [addressDetail, setAddressDetail] = useState<any>('');
+  const [category, setCategory] = useState<any>();
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().min(3).required('Required'),
@@ -92,6 +93,19 @@ const Post: React.FC<Props> = (props) => {
       console.log(response?.message);
     }
   };
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response: any = await getCategoriesApi();
+        setCategory(response);
+      } catch (error) {
+        console.log('Failed to get post list: ', error);
+      }
+    };
+    getCategories();
+  }, []);
+
   useEffect(() => {
     dispatch(unLoadding());
   }, [isLoad, dispatch]);
@@ -223,41 +237,18 @@ const Post: React.FC<Props> = (props) => {
                       <VStack h={'40px'} m={'10px 0 20px 0'}>
                         <Field
                           as='select'
-                          id='category'
-                          name='category'
+                          id='categoryId'
+                          name='categoryId'
                           className='input__field'
                           required>
                           <option value='' disabled selected>
                             Danh mục
                           </option>
-                          <option value='Bất động sản'>Bất động sản</option>
-                          <option value='Xe cộ'>Xe cộ</option>
-                          <option value='Đồ điện tử'>Đồ điện tử</option>
-                          <option value='Tủ lanh, máy lạnh, máy giặt'>
-                            Tủ lanh, máy lạnh, máy giặt
-                          </option>
-                          <option value='Đồ dùng văn phòng, công nông nghiệp'>
-                            Đồ dùng văn phòng, công nông nghiệp
-                          </option>
-                          <option value='Đồ gia dụng, nội thất, cây cảnh'>
-                            Đồ gia dụng, nội thất, cây cảnh
-                          </option>
-                          <option value='Mẹ và bé'>Mẹ và bé</option>
-                          <option value='Thời trang, đồ dùng cá nhân'>
-                            Thời trang, đồ dùng cá nhân
-                          </option>
-                          <option value='Việc làm'>Việc làm</option>
-                          <option value='Thú cưng'>Thú cưng</option>
-
-                          <option value='Giải trí, thể thao, sở thích'>
-                            <option value='Đồ ăn, thực phẩm và các loại khác'>
-                              Đồ ăn, thực phẩm và các loại khác
+                          {category?.map((item: any, index: any) => (
+                            <option key={index} value={item._id}>
+                              {item.name}
                             </option>
-                            Giải trí, thể thao, sở thích
-                          </option>
-                          <option value='Dịch vụ, du lịch'>
-                            Dịch vụ, du lịch
-                          </option>
+                          ))}
                         </Field>
                       </VStack>
                       <VStack h={'40px'} m={'10px 0 20px 0'}>

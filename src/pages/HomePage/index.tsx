@@ -12,13 +12,15 @@ import {
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import Banner from '../../components/Banner';
-import { getAllPostApi } from '../../Redux/apiRequest';
+import { getAllPostApi, getCategoriesApi } from '../../Redux/apiRequest';
 import { useAppDispatch } from '../../Redux/hooks';
 import { getAllPost } from '../../Redux/slice/postSlice';
 import PostCard from '../../components/PostCard';
+import { Link } from 'react-router-dom';
 
 const Homepage = () => {
   const [postList, setPostList] = useState<any>();
+  const [category, setCategory] = useState<any>();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -34,7 +36,17 @@ const Homepage = () => {
     getPosts();
   }, [dispatch]);
 
-  console.log('c', postList);
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response: any = await getCategoriesApi();
+        setCategory(response);
+      } catch (error) {
+        console.log('Failed to get post list: ', error);
+      }
+    };
+    getCategories();
+  }, []);
 
   const headerCategory = [
     {
@@ -62,7 +74,7 @@ const Homepage = () => {
       name: 'Định giá xe cũ',
     },
   ];
-  const category = [
+  const categoryIcon = [
     {
       icon: 'bds-icon.webp',
       name: 'Bất động sản',
@@ -169,25 +181,23 @@ const Homepage = () => {
             Khám phá danh mục
           </Text>
           <Grid templateColumns='repeat(7, 2fr)' gap={6}>
-            {category.map((item, index) => (
-              <GridItem key={index} w='100%'>
-                <Image
-                  src={require(`../../assets/image/${item.icon}`)}
-                  alt='icon'
-                  boxSize={'85px'}
-                />
-                <Text
-                  w={'110px'}
-                  h={'36px'}
-                  m='5px auto'
-                  overflow={'hidden'}
-                  textOverflow='ellipsis'
-                  lineHeight={'18px'}
-                  textAlign={'center'}
-                  fontSize={'14px'}>
-                  {item.name}
-                </Text>
-              </GridItem>
+            {category?.map((item: any, index: number) => (
+              <Link key={index} to={`danh-muc/${item.slug}`}>
+                <GridItem key={index} w='100%'>
+                  <Image src={item.icon} alt='icon' boxSize={'85px'} />
+                  <Text
+                    w={'110px'}
+                    h={'36px'}
+                    m='5px auto'
+                    overflow={'hidden'}
+                    textOverflow='ellipsis'
+                    lineHeight={'18px'}
+                    textAlign={'center'}
+                    fontSize={'14px'}>
+                    {item.name}
+                  </Text>
+                </GridItem>
+              </Link>
             ))}
           </Grid>
         </Box>

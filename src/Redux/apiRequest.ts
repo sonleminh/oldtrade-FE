@@ -20,6 +20,11 @@ export const getPostApi = async (id: any) => {
   return await axiosClient.get(url);
 };
 
+export const getPostByCategory = async (id: any) => {
+  const url = `/api/danh-muc/${id}`;
+  return await axiosClient.get(url);
+};
+
 export const createPostApi = async (data: object) => {
   const url = '/api/post';
   return await axiosClient.post(url, data);
@@ -40,6 +45,16 @@ export const getUserApi = async (id: any) => {
   return await axiosClient.get(url);
 };
 
+export const updateUser = async (id: any, data: object) => {
+  const url = `/api/user/${id}`;
+  return await axiosClient.patch(url, data);
+};
+
+export const getCategoriesApi = async () => {
+  const url = `/api/danh-muc`;
+  return await axiosClient.get(url);
+};
+
 export const getChatApi = async (id: any) => {
   const url = `/api/chat/${id}`;
   return await axiosClient.get(url);
@@ -48,6 +63,11 @@ export const getChatApi = async (id: any) => {
 export const getChatByUserApi = async (id: any) => {
   const url = `/api/chat/user/${id}`;
   return await axiosClient.get(url);
+};
+
+export const createChatApi = async (data: any) => {
+  const url = `/api/chat`;
+  return await axiosClient.post(url, data);
 };
 
 export const getMessagesApi = async (id: any) => {

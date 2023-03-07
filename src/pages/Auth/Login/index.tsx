@@ -43,7 +43,7 @@ const Login = () => {
     try {
       const response: any = await loginApi(values);
 
-      const { _id, name, email, phone } = response;
+      const { _id, name, email, phone, address, createdAt } = response;
 
       if (response.message === 'Email or password is incorrect') {
         toast.error('Sai email hoặc mật khẩu!', {
@@ -81,7 +81,7 @@ const Login = () => {
           progress: undefined,
           theme: 'light',
         });
-        dispatch(login({ _id, name, email, phone }));
+        dispatch(login({ _id, name, email, phone, address, createdAt }));
         navigate('/');
       }
     } catch (error) {

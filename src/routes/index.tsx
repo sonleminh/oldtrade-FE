@@ -11,8 +11,10 @@ import Homepage from '../pages/HomePage';
 import Post from '../pages/Post';
 import PostDetail from '../pages/PostDetail';
 import UserPost from '../pages/UserPost';
-import UserProfile from '../pages/UserProfile';
 import { useAppSelector } from '../Redux/hooks';
+import Profile from '../pages/Profile';
+import UserProfile from '../pages/UserProfile';
+import PostByCategory from '../pages/PostByCategory';
 
 function Routers() {
   const user = useAppSelector((state) => state.user);
@@ -23,26 +25,31 @@ function Routers() {
       <Route path='/' element={<DefaultLayout />}>
         <Route path='/' element={<Homepage />} />
         <Route path='/verify/:id' element={<Verify />} />
+        <Route path='/user/:id' element={<UserProfile />} />
+        <Route path='/danh-muc/:id' element={<PostByCategory />} />
       </Route>
       {user._id ? (
         <React.Fragment>
           <Route path='/' element={<DefaultLayout />}>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/post/:id' element={<PostDetail />} />
+            <Route path='/post/:id' element={<PostDetail user={user} />} />
             <Route path='/quan-ly-tin' element={<UserPost user={user} />} />
-            <Route path='/profile' element={<UserProfile user={user} />} />
+            <Route path='/profile' element={<Profile user={user} />} />
+            <Route path='/user/:id' element={<UserProfile />} />
           </Route>
           <Route path='/' element={<HeaderLayout />}>
             <Route path='/dang-tin' element={<Post user={user} />} />
             <Route path='/sua-tin/:id' element={<EditPost />} />
             <Route path='/chat' element={<Chat user={user} />} />
+            <Route path='/chat/:id' element={<Chat user={user} />} />
           </Route>
         </React.Fragment>
       ) : (
         <Route path='/' element={<DefaultLayout />}>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/post/:id' element={<PostDetail user={user} />} />
         </Route>
       )}
     </Routes>

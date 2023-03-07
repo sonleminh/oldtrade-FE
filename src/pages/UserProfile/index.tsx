@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Breadcrumb,
@@ -13,61 +14,45 @@ import {
   FaUserCircle,
   FaCalendarAlt,
   FaMapMarkerAlt,
-  FaEdit,
-  FaTrashAlt,
+  FaRegHeart,
 } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-import axiosClient from '../../api/axiosClient';
-import { deletePostApi } from '../../Redux/apiRequest';
-import { toast } from 'react-toastify';
+import { BsDot } from 'react-icons/bs';
+import { Link, useParams } from 'react-router-dom';
 import '../UserPost/UserPost.styles.scss';
+import axiosClient from '../../api/axiosClient';
+import moment from 'moment';
+import 'moment/locale/vi';
 
-interface Props {
-  user: any;
-}
-
-const UserProfile: React.FC<Props> = (props) => {
-  const { user } = props;
+const UserProfile = () => {
+  const { id } = useParams();
+  const [userPost, setUserPost] = useState<any>([]);
   const [postsByUser, setPostsByUser] = useState<any>([]);
-  const [showModal, setShowModal] = useState<boolean>(false);
   const [isLoad, setIsLoad] = useState(false);
+  moment.locale('vi');
+  useEffect(() => {
+    const getUserById = async () => {
+      try {
+        const response: any = await axiosClient.get(`/api/user/${id}`);
+        setUserPost(response);
+      } catch (error) {
+        console.log('Failed to get user by id: ', error);
+      }
+    };
+    getUserById();
+  }, [isLoad, id]);
 
   useEffect(() => {
     const getPostByUser = async () => {
       try {
-        const response: any = await axiosClient.get(
-          `/api/post/user/${user._id}`
-        );
+        const response: any = await axiosClient.get(`/api/post/user/${id}`);
         setPostsByUser(response?.post?.postList);
       } catch (error) {
         console.log('Failed to get post list: ', error);
       }
     };
     getPostByUser();
-  }, [isLoad, user._id]);
-
-  const handleDeletePost = async (id: any) => {
-    try {
-      const response: any = await deletePostApi(id);
-
-      if (response.message === 'Delete post successfully') {
-        toast.success('Xóa tin thành công!', {
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
-      }
-      setIsLoad(!isLoad);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  }, [isLoad, id]);
+  console.log(postsByUser);
 
   return (
     <Box bg='#f4f4f4' p='15px 0 35px 0'>
@@ -89,37 +74,49 @@ const UserProfile: React.FC<Props> = (props) => {
             <Flex w='50%'>
               <Icon as={FaUserCircle} color='grey' fontSize='70px' />
               <Box ml='15px' mt='10px'>
-                <Text mb='5px' color='#333333' fontWeight={700}>
-                  {user.name}
+                <Text mb='10px' color='#333333' fontWeight={700}>
+                  {userPost.name}
                 </Text>
                 <Flex>
                   <Button
-                    p='8px 10px'
-                    bg='white'
-                    color='var(--primary)'
-                    border='1px solid var(--primary)'
+                    p='8px 25px'
+                    bg='var(--primary)'
                     fontSize='14px'
-                    _hover={{
-                      bg: '#e0e0e0',
-                    }}>
-                    Chỉnh sửa cá nhân
+                    borderRadius='15px'>
+                    + <Text ml='8px'>Theo dõi</Text>
                   </Button>
                 </Flex>
               </Box>
             </Flex>
             <Box w='50%' color='#282f39'>
-              <Box mt='10px'>
-                <Text fontSize={'14px'}>
-                  <Icon as={FaCalendarAlt} mx='8px' fontSize='20px' />
-                  Ngày tham gia: 20/02/2020
+              <Flex
+                mt='10px'
+                fontSize={'14px'}
+                color='#9b9b9b'
+                alignItems={'center'}>
+                <Icon as={FaCalendarAlt} mx='8px' fontSize='20px' />
+                <Text>Ngày tham gia:</Text>
+                <Text ml='10px' color='#222'>
+                  {moment(userPost.createdAt).format('L')}
                 </Text>
-              </Box>
-              <Box mt='10px'>
-                <Text fontSize={'14px'}>
-                  <Icon as={FaMapMarkerAlt} mx='8px' fontSize='20px' />
-                  Địa chỉ: Tô Hiến Thành, Phước Mỹ, Sơn Trà, Đà Nẵng
-                </Text>
-              </Box>
+              </Flex>
+              <Flex
+                mt='10px'
+                fontSize={'14px'}
+                color='#9b9b9b'
+                alignItems={'center'}>
+                <Icon as={FaMapMarkerAlt} mx='8px' fontSize='20px' />
+                <Text>Địa chỉ:</Text>{' '}
+                {typeof userPost.address === 'undefined' ? (
+                  <Text ml='10px' color='#222'>
+                    Chưa cung cấp
+                  </Text>
+                ) : (
+                  <Text ml='10px' color='#222'>
+                    {userPost.address}
+                  </Text>
+                )}
+              </Flex>
             </Box>
           </Flex>
         </Box>
@@ -137,7 +134,11 @@ const UserProfile: React.FC<Props> = (props) => {
             Tin đang đăng
           </Text>
           {postsByUser?.map((item: any, index: number) => (
-            <Flex m='0 10px' py='15px' justifyContent={'space-between'}>
+            <Flex
+              m='0 10px'
+              py='15px'
+              justifyContent={'space-between'}
+              key={index}>
               <Link to={`/post/${item._id}`} key={index}>
                 <Flex key={index} p='7px 10px' justifyContent={'space-between'}>
                   <Image
@@ -167,26 +168,18 @@ const UserProfile: React.FC<Props> = (props) => {
                         alignItems={'center'}
                         color='rgb(155, 155, 155)'
                         fontSize='12px'>
-                        <Text mr='5px'>2 phút trước</Text>
-                        <Text mx='5px'>Đà Nẵng</Text>
+                        <Text>{moment(item.createdAt).fromNow()}</Text>
+                        <Icon as={BsDot} fontSize='10px' />
+                        <Text>{item?.address?.city}</Text>
                       </Flex>
                     </Flex>
                   </Box>
                 </Flex>
               </Link>
               <Flex alignItems={'center'}>
-                <Link to={`/sua-tin/${item._id}`}>
-                  <Button
-                    mx='10px'
-                    p='8px 10px'
-                    bg='white'
-                    color='var(--primary)'
-                    border='1px solid var(--primary)'
-                    _hover={{
-                      bg: '#e0e0e0',
-                    }}
-                    leftIcon={<FaEdit />}>
-                    Sửa tin
+                <Link to={`/post/${item._id}`}>
+                  <Button mx='10px' p='8px 20px' bg='var(--primary)'>
+                    Xem tin
                   </Button>
                 </Link>
                 <Button
@@ -198,54 +191,9 @@ const UserProfile: React.FC<Props> = (props) => {
                     bg: '#e0e0e0',
                   }}
                   fontSize={'18px'}
-                  textAlign='center'
-                  onClick={() => {
-                    setShowModal(!showModal);
-                  }}>
-                  <Icon as={FaTrashAlt} />
+                  textAlign='center'>
+                  <Icon as={FaRegHeart} color='var(--primary-red)' />
                 </Button>
-                {showModal ? (
-                  <div
-                    className='modal'
-                    onClick={() => setShowModal(!showModal)}>
-                    <div className='modal-content'>
-                      <div className='modal-header'>
-                        <label
-                          htmlFor='control-modal'
-                          className='modal-close'
-                          onClick={() => setShowModal(!showModal)}>
-                          X
-                        </label>
-                      </div>
-                      <div className='modal-body'>
-                        <p>Bạn có chắc chắc muốn xóa tin không ?</p>
-                      </div>
-                      <Flex m='15px' justifyContent={'end'}>
-                        <Button
-                          mx='5px'
-                          p='5px 8px'
-                          bg='#df2c4cde'
-                          onClick={() => handleDeletePost(item._id)}>
-                          Xóa
-                        </Button>
-                        <Button
-                          mx='5px'
-                          p='5px 8px'
-                          bg={'white'}
-                          color='var(--primary)'
-                          border='1px solid var(--primary)'
-                          onClick={() => setShowModal(!showModal)}
-                          _hover={{
-                            bg: '#E8E8E8',
-                          }}>
-                          Không
-                        </Button>
-                      </Flex>
-                    </div>
-                  </div>
-                ) : (
-                  <></>
-                )}
               </Flex>
             </Flex>
           ))}

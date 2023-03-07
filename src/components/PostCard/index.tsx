@@ -22,6 +22,7 @@ const PostCard: React.FC<Props> = (props) => {
             objectFit='cover'
           />
           <Text
+            maxW='166px'
             h={'36px'}
             m='5px auto'
             overflow={'hidden'}

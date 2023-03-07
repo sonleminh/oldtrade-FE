@@ -8,6 +8,8 @@ interface UserState {
   name: string;
   phone: string;
   email: string;
+  address: string;
+  createdAt: string;
 }
 
 // Define the initial state using that type
@@ -16,6 +18,8 @@ const initialState: UserState = {
   name: '',
   phone: '',
   email: '',
+  address: '',
+  createdAt: '',
 };
 
 export const userSlice = createSlice({
@@ -28,12 +32,16 @@ export const userSlice = createSlice({
       state.name = action.payload.name;
       state.phone = action.payload.phone;
       state.email = action.payload.email;
+      state.address = action.payload.address;
+      state.createdAt = action.payload.createdAt;
     },
     logout: (state) => {
       state._id = '';
       state.name = '';
       state.phone = '';
       state.email = '';
+      state.address = '';
+      state.createdAt = '';
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
   },

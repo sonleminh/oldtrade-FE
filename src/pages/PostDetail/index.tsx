@@ -19,19 +19,26 @@ import {
   FaRegHeart,
 } from 'react-icons/fa';
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosClient from '../../api/axiosClient';
 
-// Import css files
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import './PostDetail.styles.scss';
 import moment from 'moment';
+import { createChatApi, getChatByUserApi } from '../../Redux/apiRequest';
 
-const PostDetail = () => {
-  const [post, setPost] = useState<any>({});
+interface Props {
+  user: any;
+}
+
+const PostDetail: React.FC<Props> = (props) => {
+  const { user } = props;
   let { id } = useParams();
+  const navigate = useNavigate();
+
+  const [post, setPost] = useState<any>({});
   const postTime = moment(post.createdAt).fromNow();
 
   useEffect(() => {
@@ -45,6 +52,24 @@ const PostDetail = () => {
     };
     getPostById();
   }, [id]);
+
+  const handleCreateChat = async () => {
+    if (!user._id) return navigate('/login');
+    const response: any = await getChatByUserApi(user._id);
+    const checkExistsChat = response.find(function (element: any) {
+      return element.members.includes(user._id && post.user._id);
+    });
+
+    if (checkExistsChat) {
+      navigate(`/chat/${checkExistsChat._id}`);
+    } else {
+      const newChat: any = await createChatApi({
+        senderId: user._id,
+        receiverId: post.user._id,
+      });
+      navigate(`/chat/${newChat._id}`);
+    }
+  };
 
   var settings = {
     dots: true,
@@ -144,13 +169,20 @@ const PostDetail = () => {
                     </Flex>
                   </Box>
                 </Flex>
-                <Button
-                  p='15px 12px'
-                  h={'20px'}
-                  borderRadius='15px'
-                  fontSize='10px'>
-                  Xem trang
-                </Button>
+                <Link
+                  to={
+                    post.user?._id !== user._id
+                      ? `/user/${post.user?._id}`
+                      : '/profile'
+                  }>
+                  <Button
+                    p='15px 12px'
+                    h={'20px'}
+                    borderRadius='15px'
+                    fontSize='10px'>
+                    Xem trang
+                  </Button>
+                </Link>
               </Flex>
               <Flex
                 my='10px'
@@ -193,7 +225,13 @@ const PostDetail = () => {
                 border='1px solid #ccc'
                 fontSize={'14px'}
                 fontWeight='700'
-                justifyContent={'space-between'}>
+                justifyContent={'space-between'}
+                _hover={{
+                  boxShadow: '0 0 6px 0 #333',
+                  color: 'var(--primary)',
+                  background: 'white',
+                }}
+                onClick={handleCreateChat}>
                 <Icon as={FaComments} m='0 10px 0 5px' fontSize='20px' />
                 <Text>CHAT VỚI NGƯỜI BÁN</Text>
               </Button>

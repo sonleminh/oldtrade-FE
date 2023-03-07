@@ -69,6 +69,10 @@ const UserPost: React.FC<Props> = (props) => {
     }
   };
 
+  const handleContent = () => {
+    console.log('content');
+  };
+
   return (
     <Box bg='#f4f4f4' p='15px 0 35px 0'>
       <Container w='990px' m='0 auto'>
@@ -155,8 +159,8 @@ const UserPost: React.FC<Props> = (props) => {
           <TabPanels>
             <TabPanel>
               {postsByUser?.map((item: any, index: number) => (
-                <Flex justifyContent={'space-between'}>
-                  <Link to={`/post/${item._id}`} key={index}>
+                <Flex justifyContent={'space-between'} key={index}>
+                  <Link to={`/post/${item._id}`}>
                     <Flex
                       key={index}
                       p='7px 10px'
@@ -242,7 +246,7 @@ const UserPost: React.FC<Props> = (props) => {
                       <div
                         className='modal'
                         onClick={() => setShowModal(!showModal)}>
-                        <div className='modal-content'>
+                        <div className='modal-content' onClick={handleContent}>
                           <div className='modal-header'>
                             <label
                               htmlFor='control-modal'

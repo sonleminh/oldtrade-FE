@@ -94,7 +94,9 @@ const Header = () => {
               h={'52px'}
               justifyContent='space-between'
               alignItems={'center'}>
-              <Image src={LOGO} w='100px' />
+              <Link to='/'>
+                <Image src={LOGO} w='100px' />
+              </Link>
               <Flex gap={'30px'}>
                 <Link to='/'>
                   <Flex

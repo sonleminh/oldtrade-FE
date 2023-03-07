@@ -1,7 +1,7 @@
 import { Flex, Text, Icon } from '@chakra-ui/react';
 import { FaUserCircle } from 'react-icons/fa';
 import React, { useEffect, useState } from 'react';
-import { getLastMessagesApi, getUserApi } from '../../Redux/apiRequest';
+import { getLastMessagesApi, getUserApi } from '../../../Redux/apiRequest';
 import moment from 'moment';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
   conversation: any;
 }
 
-const Conversation: React.FC<Props> = (props) => {
+const ChatInfo: React.FC<Props> = (props) => {
   const [friend, setFriend] = useState<any>();
   const [message, setMessage] = useState<any>();
   const { user, conversation } = props;
@@ -39,8 +39,6 @@ const Conversation: React.FC<Props> = (props) => {
     getMesages();
   }, [conversation?._id]);
 
-  console.log(message);
-
   return (
     <Flex
       mr='5px'
@@ -56,10 +54,10 @@ const Conversation: React.FC<Props> = (props) => {
             {moment(conversation.createdAt).fromNow()}
           </Text>
         </Flex>
-        <Text mt='7px'>{message?.[0].text}</Text>
+        <Text mt='7px'>{message?.[0]?.text}</Text>
       </Flex>
     </Flex>
   );
 };
 
-export default Conversation;
+export default ChatInfo;
