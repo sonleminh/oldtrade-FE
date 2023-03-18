@@ -73,9 +73,9 @@ const Register = () => {
       );
     } catch (error) {
       const response = error.response?.data;
-      console.log(response?.message);
+      // console.log('res', response);
 
-      if (response.message === 'This email already exists') {
+      if (response?.message === 'This email already exists') {
         toast.error('Email đã tồn tại!', {
           position: 'top-right',
           autoClose: 3000,
@@ -87,8 +87,20 @@ const Register = () => {
           theme: 'light',
         });
       }
-      if (response.message === 'This phone number already exists') {
+      if (response?.message === 'This phone number already exists') {
         toast.error('SĐT đã tồn tại!', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+      }
+      if (typeof response === 'undefined') {
+        toast.error('Waiting for server loading', {
           position: 'top-right',
           autoClose: 3000,
           hideProgressBar: false,

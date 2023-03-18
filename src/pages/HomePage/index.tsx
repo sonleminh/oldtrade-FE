@@ -42,11 +42,13 @@ const Homepage = () => {
         const response: any = await getCategoriesApi();
         setCategory(response);
       } catch (error) {
-        console.log('Failed to get post list: ', error);
+        console.log('Failed to get category list: ', error);
       }
     };
     getCategories();
   }, []);
+
+  console.log(category);
 
   const headerCategory = [
     {
@@ -72,64 +74,6 @@ const Homepage = () => {
     {
       icon: 'car-icon.webp',
       name: 'Định giá xe cũ',
-    },
-  ];
-  const categoryIcon = [
-    {
-      icon: 'bds-icon.webp',
-      name: 'Bất động sản',
-    },
-    {
-      icon: 'vehicle-icon.webp',
-      name: 'Xe cộ',
-    },
-    {
-      icon: 'digital-icon.webp',
-      name: 'Đồ điện tử',
-    },
-    {
-      icon: 'furniture-icon.webp',
-      name: 'Đồ gia dụng, nội thất, cây cảnh',
-    },
-    {
-      icon: 'entertainment-icon.webp',
-      name: 'Giải trí, thể thao, sở thích',
-    },
-    {
-      icon: 'baby&mom-icon.webp',
-      name: 'Mẹ và bé',
-    },
-    {
-      icon: 'service-icon.webp',
-      name: 'Dịch vụ, du lịch',
-    },
-    {
-      icon: 'job-icon.webp',
-      name: 'Việc làm',
-    },
-    {
-      icon: 'pet-icon.webp',
-      name: 'Thú cưng',
-    },
-    {
-      icon: 'food-icon.webp',
-      name: 'Đồ ăn, thực phẩm và các loại khác',
-    },
-    {
-      icon: 'tulanhmaygiat-icon.webp',
-      name: 'Tủ lanh, máy lạnh, máy giặt',
-    },
-    {
-      icon: 'fashion-icon.webp',
-      name: 'Thời trang, đồ dùng cá nhân',
-    },
-    {
-      icon: 'office-icon.webp',
-      name: 'Đồ dùng văn phòng, công nông nghiệp',
-    },
-    {
-      icon: 'gift2-icon.webp',
-      name: 'Cho tặng miễn phí',
     },
   ];
 

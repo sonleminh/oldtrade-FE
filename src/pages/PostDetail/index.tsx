@@ -140,7 +140,11 @@ const PostDetail: React.FC<Props> = (props) => {
                   bg='white'
                   color='var(--primary-red)'
                   border={'1px solid var(--primary-red)'}
-                  borderRadius='15px'>
+                  borderRadius='15px'
+                  _hover={{
+                    boxShadow: '0 0 6px 0 #333',
+                    background: 'white',
+                  }}>
                   Lưu tin
                 </Button>
               </Flex>
