@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Box,
   Container,
@@ -17,7 +18,6 @@ import {
   FaCircle,
 } from 'react-icons/fa';
 import { AiOutlineSend } from 'react-icons/ai';
-import React, { useEffect, useRef, useState } from 'react';
 import ChatInfo from './ChatInfo';
 
 import {

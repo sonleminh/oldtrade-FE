@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from '../DefaultLayout/Header';
-import { Outlet } from 'react-router-dom';
 import { Box } from '@chakra-ui/react';
+import { Outlet } from 'react-router-dom';
+import Header from '../DefaultLayout/Header';
 
 const HeaderLayout = () => {
   return (

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Breadcrumb,
@@ -18,16 +19,15 @@ import {
   FaComments,
   FaRegHeart,
 } from 'react-icons/fa';
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import axiosClient from '../../api/axiosClient';
-
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import './PostDetail.styles.scss';
-import moment from 'moment';
+
+import axiosClient from '../../api/axiosClient';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { createChatApi, getChatByUserApi } from '../../Redux/apiRequest';
+import moment from 'moment';
 
 interface Props {
   user: any;

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Breadcrumb,
@@ -16,17 +17,14 @@ import {
   Grid,
   GridItem,
 } from '@chakra-ui/react';
-import { FaUserCircle, FaEdit, FaRegHeart } from 'react-icons/fa';
-import React, { useEffect, useState } from 'react';
+import { FaUserCircle, FaRegHeart } from 'react-icons/fa';
+
 import { Link, useParams } from 'react-router-dom';
-import axiosClient from '../../api/axiosClient';
 import { getPostByCategory } from '../../Redux/apiRequest';
-import { toast } from 'react-toastify';
 import moment from 'moment';
 
 const PostByCategory = () => {
   const [postCategory, setPostCategory] = useState<any>();
-  const [isLoad, setIsLoad] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -39,22 +37,7 @@ const PostByCategory = () => {
       }
     };
     getCategory();
-  }, [isLoad, id]);
-  const date = postCategory?.postList;
-  console.log(new Date(date?.[0].createdAt));
-
-  // console.log(
-  //   postCategory?.postList?.sort(function (a: any, b: any) {
-  //     var dateA = new Date(a.createdAt).getTime();
-  //     var dateB = new Date(b.createdAt).getTime();
-  //     return Math.abs(dateA - dateB);
-  //   })
-  // );
-  // postCategory?.postList.sort(function (a: any, b: any) {
-  //   return a.plantingDate.localeCompare(b.createdAt);
-  // });
-
-  // postCategory.postList.forEach((element: any) => console.log(element));
+  }, [id]);
 
   return (
     <Box bg='#f4f4f4' p='15px 0 35px 0'>

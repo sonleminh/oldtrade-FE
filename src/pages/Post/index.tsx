@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -17,21 +18,25 @@ import {
 import { FaTimes } from 'react-icons/fa';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import './Post.styles.scss';
-import { createPostApi, getCategoriesApi } from '../../Redux/apiRequest';
 import { toast } from 'react-toastify';
+import SyncLoader from 'react-spinners/SyncLoader';
+import FadeLoader from 'react-spinners/FadeLoader';
+
 import axiosClient from '../../api/axiosClient';
-import { useAppDispatch } from '../../Redux/hooks';
-import { unLoadding } from '../../Redux/slice/loadingSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import { createPostApi, getCategoriesApi } from '../../Redux/apiRequest';
+import { useAppDispatch, useAppSelector } from '../../Redux/hooks';
+import { loading, unLoadding } from '../../Redux/slice/loadingSlice';
 
 interface Props {
   user: any;
 }
 
 const Post: React.FC<Props> = (props) => {
+  const load = useAppSelector((state) => state.loading.value);
   const { user } = props;
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [isLoad, setIsLoad] = useState(false);
@@ -45,18 +50,12 @@ const Post: React.FC<Props> = (props) => {
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().min(3).required('Required'),
-    price: Yup.string()
-      .min(4)
-      .required()
-      .matches(
-        /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/,
-        'Price is not valid'
-      ),
     description: Yup.string().min(5).required('Email is required!'),
   });
 
   const handlePostFormSubmit = async (values: object) => {
     try {
+      dispatch(loading());
       const userId = user._id;
       if (!previewSource) return;
       let imageData: any = await uploadImage(previewSource);
@@ -87,6 +86,7 @@ const Post: React.FC<Props> = (props) => {
           progress: undefined,
           theme: 'light',
         });
+        dispatch(unLoadding());
       }
     } catch (error) {
       const response = error?.response?.data;
@@ -216,6 +216,18 @@ const Post: React.FC<Props> = (props) => {
                     </Box>
                   </GridItem>
                 ))}
+                {load ? (
+                  <Box display={'flex'} justifyContent={'center'} ml='20px'>
+                    <FadeLoader
+                      color='var(--primary)'
+                      height={8}
+                      margin={-5}
+                      width={3}
+                    />
+                  </Box>
+                ) : (
+                  <></>
+                )}
               </Grid>
             </GridItem>
             <GridItem colSpan={4} px='30px' h='100%'>
@@ -384,6 +396,20 @@ const Post: React.FC<Props> = (props) => {
                           Quay lại
                         </Button>
                       </Flex>
+                      {load ? (
+                        <Box
+                          display={'flex'}
+                          justifyContent={'center'}
+                          mt='15px'>
+                          <SyncLoader
+                            size={7}
+                            margin={4}
+                            color='var(--primary)'
+                          />
+                        </Box>
+                      ) : (
+                        <></>
+                      )}
                     </Form>
                   );
                 }}

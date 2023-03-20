@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Container,
@@ -17,27 +18,33 @@ import {
 import { FaTimes } from 'react-icons/fa';
 import { Field, Formik } from 'formik';
 import * as Yup from 'yup';
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { editPostApi, getPostApi } from '../../Redux/apiRequest';
-import axiosClient from '../../api/axiosClient';
 import { toast } from 'react-toastify';
 import '../Post/Post.styles.scss';
+import { SyncLoader } from 'react-spinners';
+
+import axiosClient from '../../api/axiosClient';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { editPostApi, getPostApi } from '../../Redux/apiRequest';
+import { useAppDispatch, useAppSelector } from '../../Redux/hooks';
+import { loading, unLoadding } from '../../Redux/slice/loadingSlice';
 
 interface Props {
   post: any;
 }
 
 const EditPostForm: React.FC<Props> = (props) => {
+  const load = useAppSelector((state) => state.loading.value);
+  const { post } = props;
+
   const [isLoad, setIsLoad] = useState(false);
   const [cityId, setCityId] = useState<any>('');
   const [local, setLocal] = useState<any>();
   const [districtId, setDistrictId] = useState<any>('');
   const [wardId, setWardId] = useState<any>('');
   const [addressDetail, setAddressDetail] = useState<any>('');
-  const { post } = props;
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().min(3).required('Required'),
@@ -52,6 +59,7 @@ const EditPostForm: React.FC<Props> = (props) => {
 
   const onFormSubmit = async (formData: any) => {
     try {
+      dispatch(loading());
       if (!previewSource) return;
       let imageData: any = await uploadImage(previewSource);
       imageData = imageData.map((item: any) => {
@@ -68,7 +76,6 @@ const EditPostForm: React.FC<Props> = (props) => {
         },
       };
       const response: any = await editPostApi(id, data);
-      console.log(response);
       if (response.message === 'Update post successfully') {
         toast.success('Sửa tin thành công!', {
           position: 'top-right',
@@ -80,6 +87,8 @@ const EditPostForm: React.FC<Props> = (props) => {
           progress: undefined,
           theme: 'light',
         });
+        dispatch(unLoadding());
+
         navigate(-1);
       }
     } catch (error) {
@@ -409,6 +418,17 @@ const EditPostForm: React.FC<Props> = (props) => {
                         Quay lại
                       </Button>
                     </Flex>
+                    {load ? (
+                      <Box display={'flex'} justifyContent={'center'} mt='15px'>
+                        <SyncLoader
+                          size={7}
+                          margin={4}
+                          color='var(--primary)'
+                        />
+                      </Box>
+                    ) : (
+                      <></>
+                    )}
                   </>
                 )}
               </Formik>

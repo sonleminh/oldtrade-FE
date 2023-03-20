@@ -1,5 +1,5 @@
-import { Image } from '@chakra-ui/react';
 import React from 'react';
+import { Image } from '@chakra-ui/react';
 import OwlCarousel from 'react-owl-carousel';
 import 'react-owl-carousel2/lib/styles.css';
 import 'react-owl-carousel2/src/owl.theme.default.css';

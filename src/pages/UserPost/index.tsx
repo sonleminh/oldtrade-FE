@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Breadcrumb,
@@ -15,12 +16,12 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { FaUserCircle, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import axiosClient from '../../api/axiosClient';
-import { deletePostApi } from '../../Redux/apiRequest';
-import './UserPost.styles.scss';
 import { toast } from 'react-toastify';
+import './UserPost.styles.scss';
+
+import axiosClient from '../../api/axiosClient';
+import { Link } from 'react-router-dom';
+import { deletePostApi } from '../../Redux/apiRequest';
 import moment from 'moment';
 
 interface Props {

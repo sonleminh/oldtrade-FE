@@ -17,9 +17,10 @@ import {
   FaRegHeart,
 } from 'react-icons/fa';
 import { BsDot } from 'react-icons/bs';
-import { Link, useParams } from 'react-router-dom';
 import '../UserPost/UserPost.styles.scss';
+
 import axiosClient from '../../api/axiosClient';
+import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
 import 'moment/locale/vi';
 
@@ -27,7 +28,6 @@ const UserProfile = () => {
   const { id } = useParams();
   const [userPost, setUserPost] = useState<any>([]);
   const [postsByUser, setPostsByUser] = useState<any>([]);
-  const [isLoad, setIsLoad] = useState(false);
   moment.locale('vi');
   useEffect(() => {
     const getUserById = async () => {
@@ -39,7 +39,7 @@ const UserProfile = () => {
       }
     };
     getUserById();
-  }, [isLoad, id]);
+  }, [id]);
 
   useEffect(() => {
     const getPostByUser = async () => {
@@ -51,7 +51,7 @@ const UserProfile = () => {
       }
     };
     getPostByUser();
-  }, [isLoad, id]);
+  }, [id]);
   console.log(postsByUser);
 
   return (

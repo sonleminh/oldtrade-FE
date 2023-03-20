@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Box,
   Container,
@@ -9,7 +10,6 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { FaFacebookSquare, FaYoutubeSquare, FaLinkedin } from 'react-icons/fa';
-import React from 'react';
 
 const Footer = () => {
   return (

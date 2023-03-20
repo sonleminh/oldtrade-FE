@@ -1,6 +1,7 @@
+import React from 'react';
 import { Box, Button, Icon, Text } from '@chakra-ui/react';
 import { MdMarkEmailRead } from 'react-icons/md';
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import axiosClient from '../../../api/axiosClient';
 

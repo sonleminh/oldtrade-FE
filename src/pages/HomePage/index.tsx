@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -10,31 +11,21 @@ import {
   UnorderedList,
   ListItem,
 } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
-import Banner from '../../components/Banner';
+import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from 'react-loading-skeleton';
+
+import { Link } from 'react-router-dom';
 import { getAllPostApi, getCategoriesApi } from '../../Redux/apiRequest';
 import { useAppDispatch } from '../../Redux/hooks';
 import { getAllPost } from '../../Redux/slice/postSlice';
+
 import PostCard from '../../components/PostCard';
-import { Link } from 'react-router-dom';
+import Banner from '../../components/Banner';
 
 const Homepage = () => {
   const [postList, setPostList] = useState<any>();
   const [category, setCategory] = useState<any>();
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const getPosts = async () => {
-      try {
-        const response: any = await getAllPostApi();
-        setPostList(response);
-        dispatch(getAllPost(response));
-      } catch (error) {
-        console.log('Failed to get post list: ', error);
-      }
-    };
-    getPosts();
-  }, [dispatch]);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -48,7 +39,20 @@ const Homepage = () => {
     getCategories();
   }, []);
 
-  console.log(category);
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        const response: any = await getAllPostApi();
+        setPostList(response);
+        console.log(response);
+
+        dispatch(getAllPost(response));
+      } catch (error) {
+        console.log('Failed to get post list: ', error);
+      }
+    };
+    getPosts();
+  }, [dispatch]);
 
   const headerCategory = [
     {
@@ -124,26 +128,93 @@ const Homepage = () => {
             fontWeight={'700'}>
             Khám phá danh mục
           </Text>
-          <Grid templateColumns='repeat(7, 2fr)' gap={6}>
-            {category?.map((item: any, index: number) => (
-              <Link key={index} to={`danh-muc/${item.slug}`}>
-                <GridItem key={index} w='100%'>
-                  <Image src={item.icon} alt='icon' boxSize={'85px'} />
-                  <Text
-                    w={'110px'}
-                    h={'36px'}
-                    m='5px auto'
-                    overflow={'hidden'}
-                    textOverflow='ellipsis'
-                    lineHeight={'18px'}
-                    textAlign={'center'}
-                    fontSize={'14px'}>
-                    {item.name}
-                  </Text>
-                </GridItem>
-              </Link>
-            ))}
-          </Grid>
+          <Grid templateColumns='repeat(7, 2fr)' gap={6}></Grid>
+
+          {category ? (
+            <Grid templateColumns='repeat(7, 2fr)' gap={6}>
+              {category.map((item: any, index: number) => (
+                <Link key={index} to={`danh-muc/${item.slug}`}>
+                  <GridItem key={index} w='100%'>
+                    <Image src={item.icon} alt='icon' boxSize={'85px'} />
+                    <Text
+                      w={'110px'}
+                      h={'36px'}
+                      m='5px auto'
+                      overflow={'hidden'}
+                      textOverflow='ellipsis'
+                      lineHeight={'18px'}
+                      textAlign={'center'}
+                      fontSize={'14px'}>
+                      {item.name}
+                    </Text>
+                  </GridItem>
+                </Link>
+              ))}
+            </Grid>
+          ) : (
+            <Grid
+              templateColumns='repeat(7, 1fr)'
+              gap={5}
+              justifyContent='space-between'
+              pb='10px'>
+              <Box>
+                <Skeleton
+                  count={2}
+                  width={'70%'}
+                  height={30}
+                  style={{ margin: '5px 0' }}
+                />
+              </Box>
+              <Box>
+                <Skeleton
+                  count={2}
+                  width={'70%'}
+                  height={30}
+                  style={{ margin: '5px 0' }}
+                />
+              </Box>
+              <Box>
+                <Skeleton
+                  count={2}
+                  width={'70%'}
+                  height={30}
+                  style={{ margin: '5px 0' }}
+                />
+              </Box>
+              <Box>
+                <Skeleton
+                  count={2}
+                  width={'70%'}
+                  height={30}
+                  style={{ margin: '5px 0' }}
+                />
+              </Box>
+              <Box>
+                <Skeleton
+                  count={2}
+                  width={'70%'}
+                  height={30}
+                  style={{ margin: '5px 0' }}
+                />
+              </Box>
+              <Box bg='white'>
+                <Skeleton
+                  count={2}
+                  width={'70%'}
+                  height={30}
+                  style={{ margin: '5px 0' }}
+                />
+              </Box>
+              <Box bg='white'>
+                <Skeleton
+                  count={2}
+                  width={'70%'}
+                  height={30}
+                  style={{ margin: '5px 0' }}
+                />
+              </Box>
+            </Grid>
+          )}
         </Box>
         <Box bg={'white'}>
           <Text
@@ -155,13 +226,58 @@ const Homepage = () => {
             borderBottom={'2px solid #F4F4F4'}>
             Tin đăng mới
           </Text>
-          <Grid templateColumns='repeat(5, 1fr)'>
-            {postList?.map((item: any, index: number) => (
-              <GridItem key={index} w='100%'>
-                <PostCard item={item} />
+          {postList ? (
+            <Grid templateColumns='repeat(5, 1fr)'>
+              {postList?.map((item: any, index: number) => (
+                <GridItem key={index} w='100%'>
+                  <PostCard item={item} />
+                </GridItem>
+              ))}
+            </Grid>
+          ) : (
+            <Grid templateColumns='repeat(5, 1fr)' gap={5} pb='10px'>
+              <GridItem textAlign={'center'}>
+                <Skeleton
+                  count={2}
+                  width={'90%'}
+                  height={180}
+                  style={{ margin: '5px 0' }}
+                />
               </GridItem>
-            ))}
-          </Grid>
+              <GridItem textAlign={'center'}>
+                <Skeleton
+                  count={2}
+                  width={'90%'}
+                  height={180}
+                  style={{ margin: '5px 0' }}
+                />
+              </GridItem>
+              <GridItem textAlign={'center'}>
+                <Skeleton
+                  count={2}
+                  width={'90%'}
+                  height={180}
+                  style={{ margin: '5px 0' }}
+                />
+              </GridItem>
+              <GridItem textAlign={'center'}>
+                <Skeleton
+                  count={2}
+                  width={'90%'}
+                  height={180}
+                  style={{ margin: '5px 0' }}
+                />
+              </GridItem>
+              <GridItem textAlign={'center'}>
+                <Skeleton
+                  count={2}
+                  width={'90%'}
+                  height={180}
+                  style={{ margin: '5px 0' }}
+                />
+              </GridItem>
+            </Grid>
+          )}
         </Box>
         <Box textAlign={'center'}>
           <Button

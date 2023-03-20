@@ -1,3 +1,5 @@
+import React from 'react';
+import { useState } from 'react';
 import {
   Box,
   Breadcrumb,
@@ -10,16 +12,17 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
-import { useState } from 'react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { registerApi } from '../../../Redux/apiRequest';
+import FadeLoader from 'react-spinners/FadeLoader';
+
+import { Link } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
+import { registerApi } from '../../../Redux/apiRequest';
+import { useAppDispatch, useAppSelector } from '../../../Redux/hooks';
+import { loading, unLoadding } from '../../../Redux/slice/loadingSlice';
 
 const BACKGROUND = require('../../../assets/image/login_desktop_background.webp');
 
@@ -38,10 +41,14 @@ const validationSchema = Yup.object().shape({
 });
 
 const Register = () => {
+  const load = useAppSelector((state) => state.loading.value);
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const handleRegisterFormSubmit = async (values: object) => {
     try {
+      dispatch(loading());
       const response: any = await registerApi(values);
       const web = `http://${window.location.host}/verify/${response.user._id}`;
       const data: any = {
@@ -71,6 +78,7 @@ const Register = () => {
           theme: 'light',
         }
       );
+      dispatch(unLoadding());
     } catch (error) {
       const response = error.response?.data;
       // console.log('res', response);
@@ -86,6 +94,7 @@ const Register = () => {
           progress: undefined,
           theme: 'light',
         });
+        dispatch(unLoadding());
       }
       if (response?.message === 'This phone number already exists') {
         toast.error('SĐT đã tồn tại!', {
@@ -98,6 +107,7 @@ const Register = () => {
           progress: undefined,
           theme: 'light',
         });
+        dispatch(unLoadding());
       }
       if (typeof response === 'undefined') {
         toast.error('Waiting for server loading', {
@@ -110,6 +120,7 @@ const Register = () => {
           progress: undefined,
           theme: 'light',
         });
+        dispatch(unLoadding());
       }
     }
   };
@@ -228,7 +239,18 @@ const Register = () => {
                       {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                     </Button>
                   </VStack>
-
+                  {load ? (
+                    <Box display={'flex'} justifyContent={'center'} ml='20px'>
+                      <FadeLoader
+                        color='var(--primary)'
+                        height={8}
+                        margin={-5}
+                        width={3}
+                      />
+                    </Box>
+                  ) : (
+                    <></>
+                  )}
                   <button
                     type='submit'
                     disabled={!isValid}

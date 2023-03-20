@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Breadcrumb,
@@ -17,15 +18,15 @@ import {
   FaEdit,
   FaTrashAlt,
 } from 'react-icons/fa';
-import React, { useEffect, useState } from 'react';
-import axiosClient from '../../api/axiosClient';
-import { getUserApi, deletePostApi, updateUser } from '../../Redux/apiRequest';
 import { Field, Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import '../UserPost/UserPost.styles.scss';
+
+import axiosClient from '../../api/axiosClient';
+import { getUserApi, deletePostApi, updateUser } from '../../Redux/apiRequest';
 import ReactModal from 'react-modal';
 import { Link } from 'react-router-dom';
-import '../UserPost/UserPost.styles.scss';
 import moment from 'moment';
 
 interface Props {
@@ -82,7 +83,7 @@ const Profile: React.FC<Props> = (props) => {
       }
     };
     getPostByUser();
-  }, [isLoad, user._id]);
+  }, [user._id]);
 
   const handleDeletePost = async (id: any) => {
     try {

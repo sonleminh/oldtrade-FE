@@ -1,3 +1,5 @@
+import React from 'react';
+import { useState } from 'react';
 import {
   Box,
   Breadcrumb,
@@ -10,16 +12,18 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
-import { useState } from 'react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { toast } from 'react-toastify';
+
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import FadeLoader from 'react-spinners/FadeLoader';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { useAppDispatch } from '../../../Redux/hooks';
+
+import { useAppDispatch, useAppSelector } from '../../../Redux/hooks';
 import { login } from '../../../Redux/slice/userSlice';
 import { loginApi } from '../../../Redux/apiRequest';
+import { loading, unLoadding } from '../../../Redux/slice/loadingSlice';
 
 const BACKGROUND = require('../../../assets/image/login_desktop_background.webp');
 
@@ -36,11 +40,14 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login = () => {
+  const load = useAppSelector((state) => state.loading.value);
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleLoginFormSubmit = async (values: Values) => {
     try {
+      dispatch(loading());
       const response: any = await loginApi(values);
 
       const { _id, name, email, phone, address, createdAt } = response;
@@ -56,6 +63,7 @@ const Login = () => {
           progress: undefined,
           theme: 'light',
         });
+        dispatch(unLoadding());
       } else if (response.verified === false) {
         toast.error(
           'Tài khoản chưa được xác minh, vui lòng kiểm tra lại email!',
@@ -70,6 +78,7 @@ const Login = () => {
             theme: 'light',
           }
         );
+        dispatch(unLoadding());
       } else {
         toast.success('Đăng nhập thành công!', {
           position: 'top-right',
@@ -81,6 +90,8 @@ const Login = () => {
           progress: undefined,
           theme: 'light',
         });
+        dispatch(unLoadding());
+
         dispatch(login({ _id, name, email, phone, address, createdAt }));
         navigate('/');
       }
@@ -89,6 +100,7 @@ const Login = () => {
       console.log(response.message);
     }
   };
+
   return (
     <Box
       backgroundImage={`url(${BACKGROUND})`}
@@ -183,7 +195,18 @@ const Login = () => {
                       {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                     </Button>
                   </VStack>
-
+                  {load ? (
+                    <Box display={'flex'} justifyContent={'center'} ml='20px'>
+                      <FadeLoader
+                        color='var(--primary)'
+                        height={8}
+                        margin={-5}
+                        width={3}
+                      />
+                    </Box>
+                  ) : (
+                    <></>
+                  )}
                   <button
                     type='submit'
                     disabled={!isValid}

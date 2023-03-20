@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { useAppSelector } from '../Redux/hooks';
+
 import DefaultLayout from '../layout/DefaultLayout';
 import HeaderLayout from '../layout/HeaderLayout';
 import Login from '../pages/Auth/Login';
@@ -11,14 +13,12 @@ import Homepage from '../pages/HomePage';
 import Post from '../pages/Post';
 import PostDetail from '../pages/PostDetail';
 import UserPost from '../pages/UserPost';
-import { useAppSelector } from '../Redux/hooks';
 import Profile from '../pages/Profile';
 import UserProfile from '../pages/UserProfile';
 import PostByCategory from '../pages/PostByCategory';
 
 function Routers() {
   const user = useAppSelector((state) => state.user);
-  // const posts = useAppSelector((state) => state.post.postList);
 
   return (
     <Routes>

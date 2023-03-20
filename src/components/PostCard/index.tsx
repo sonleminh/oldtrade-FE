@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Flex, Image, Text, Icon } from '@chakra-ui/react';
 import { BsDot } from 'react-icons/bs';
+
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 

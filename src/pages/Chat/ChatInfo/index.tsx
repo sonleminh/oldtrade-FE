@@ -1,6 +1,7 @@
+import React, { useEffect, useState } from 'react';
 import { Flex, Text, Icon } from '@chakra-ui/react';
 import { FaUserCircle } from 'react-icons/fa';
-import React, { useEffect, useState } from 'react';
+
 import { getLastMessagesApi, getUserApi } from '../../../Redux/apiRequest';
 import moment from 'moment';
 
