@@ -10,6 +10,11 @@ export const loginApi = async (data: object) => {
   return await axiosClient.post(url, data);
 };
 
+export const changePassApi = async (id: string, data: object) => {
+  const url = `/api/changepass/${id}`;
+  return await axiosClient.patch(url, data);
+};
+
 export const getAllPostApi = async () => {
   const url = '/api/post';
   return await axiosClient.get(url);

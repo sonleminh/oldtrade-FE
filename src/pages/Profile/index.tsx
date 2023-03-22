@@ -185,7 +185,7 @@ const Profile: React.FC<Props> = (props) => {
                   border='1px solid var(--primary)'
                   fontSize='14px'
                   _hover={{
-                    bg: '#e0e0e0',
+                    bg: '#f9f9f9',
                   }}
                   onClick={handleShowEditModal}>
                   Chỉnh sửa thông tin
@@ -239,6 +239,31 @@ const Profile: React.FC<Props> = (props) => {
                             onChange={handleChange}
                           />
                         </VStack>
+                        <VStack
+                          position={'relative'}
+                          h={'40px'}
+                          m={'0 0 20px 0'}>
+                          <Field
+                            id='password'
+                            className='input__field'
+                            name='password'
+                            type={'password'}
+                            placeholder='Nhập mật khẩu của bạn'
+                            value='12345'
+                            disabled
+                          />
+                          <Link
+                            to='/changepass'
+                            style={{
+                              position: 'absolute',
+                              top: '5px',
+                              right: '15px',
+                              color: 'var(--primary)',
+                              fontSize: '14px',
+                            }}>
+                            Đổi mật khẩu
+                          </Link>
+                        </VStack>
                         <VStack h={'40px'} m={'0 0 20px 0'}>
                           <Field
                             className='input__field'
@@ -262,7 +287,7 @@ const Profile: React.FC<Props> = (props) => {
                             border={'1px solid var(--primary)'}
                             fontWeight={700}
                             _hover={{
-                              bg: '#e0e0e0',
+                              bg: '#f9f9f9',
                             }}
                             onClick={closeModal}>
                             Quay lại
@@ -295,7 +320,10 @@ const Profile: React.FC<Props> = (props) => {
                   color='#9b9b9b'
                   alignItems={'center'}>
                   <Icon as={FaMapMarkerAlt} mx='8px' fontSize='20px' />
-                  Địa chỉ: Tô Hiến Thành, Phước Mỹ, Sơn Trà, Đà Nẵng
+                  Địa chỉ:
+                  <Text ml='10px' color='#222'>
+                    Tô Hiến Thành, Phước Mỹ, Sơn Trà, Đà Nẵng
+                  </Text>
                 </Flex>
               </Box>
             </Box>
@@ -377,7 +405,7 @@ const Profile: React.FC<Props> = (props) => {
                   bg='white'
                   color='grey'
                   _hover={{
-                    bg: '#e0e0e0',
+                    bg: '#f9f9f9',
                   }}
                   fontSize={'18px'}
                   textAlign='center'

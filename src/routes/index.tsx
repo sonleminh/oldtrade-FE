@@ -16,6 +16,7 @@ import UserPost from '../pages/UserPost';
 import Profile from '../pages/Profile';
 import UserProfile from '../pages/UserProfile';
 import PostByCategory from '../pages/PostByCategory';
+import ChangePass from '../pages/ChangePass';
 
 function Routers() {
   const user = useAppSelector((state) => state.user);
@@ -38,6 +39,10 @@ function Routers() {
             <Route path='/quan-ly-tin' element={<UserPost user={user} />} />
             <Route path='/profile' element={<Profile user={user} />} />
             <Route path='/user/:id' element={<UserProfile />} />
+            <Route
+              path='/changepass'
+              element={<ChangePass userId={user._id} />}
+            />
           </Route>
           <Route path='/' element={<HeaderLayout />}>
             <Route path='/dang-tin' element={<Post user={user} />} />

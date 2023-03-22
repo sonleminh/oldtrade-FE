@@ -103,7 +103,7 @@ const UserPost: React.FC<Props> = (props) => {
                   border='1px solid var(--primary)'
                   fontSize='14px'
                   _hover={{
-                    bg: '#e0e0e0',
+                    bg: '#f9f9f9',
                   }}>
                   Trang cá nhân
                 </Button>
@@ -222,7 +222,7 @@ const UserPost: React.FC<Props> = (props) => {
                         color='var(--primary)'
                         border='1px solid var(--primary)'
                         _hover={{
-                          bg: '#e0e0e0',
+                          bg: '#f9f9f9',
                         }}
                         leftIcon={<FaEdit />}>
                         Sửa tin
@@ -234,7 +234,7 @@ const UserPost: React.FC<Props> = (props) => {
                       bg='white'
                       color='grey'
                       _hover={{
-                        bg: '#e0e0e0',
+                        bg: '#f9f9f9',
                       }}
                       fontSize={'18px'}
                       textAlign='center'

@@ -26,6 +26,7 @@ const Homepage = () => {
   const [postList, setPostList] = useState<any>();
   const [category, setCategory] = useState<any>();
   const dispatch = useAppDispatch();
+  console.log('homepage render');
 
   useEffect(() => {
     const getCategories = async () => {
@@ -44,8 +45,6 @@ const Homepage = () => {
       try {
         const response: any = await getAllPostApi();
         setPostList(response);
-        console.log(response);
-
         dispatch(getAllPost(response));
       } catch (error) {
         console.log('Failed to get post list: ', error);

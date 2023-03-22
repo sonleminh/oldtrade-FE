@@ -390,7 +390,7 @@ const Post: React.FC<Props> = (props) => {
                           border={'1px solid var(--primary)'}
                           fontWeight={700}
                           _hover={{
-                            bg: '#e0e0e0',
+                            bg: '#f9f9f9',
                           }}
                           onClick={() => navigate('/')}>
                           Quay lại

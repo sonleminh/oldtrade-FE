@@ -39,7 +39,14 @@ const PostCard: React.FC<Props> = (props) => {
             color='#d0021b'
             fontSize={'15px'}
             fontWeight='700'>
-            {item.price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} đ
+            {item.price === '' ? (
+              <>Miễn phí</>
+            ) : (
+              <>
+                {item.price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') +
+                  ' đ'}
+              </>
+            )}
           </Text>
           <Flex
             m={'10px 0'}
