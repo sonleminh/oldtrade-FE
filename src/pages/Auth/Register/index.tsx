@@ -17,6 +17,7 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import FadeLoader from 'react-spinners/FadeLoader';
+import './Register.styles.scss';
 
 import { Link } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
@@ -130,7 +131,11 @@ const Register = () => {
       bgPosition={'bottom'}
       bgSize='50% auto'
       bgRepeat={'no-repeat'}>
-      <Container w={'936px'} m='15px auto 0 auto' p='0 12px'>
+      <Container
+        w={'936px'}
+        m='15px auto 0 auto'
+        p='0 12px'
+        className='container'>
         <Breadcrumb fontSize={'13px'} separator='-'>
           <BreadcrumbItem>
             <BreadcrumbLink href='/'>Trang chủ</BreadcrumbLink>
@@ -146,7 +151,8 @@ const Register = () => {
           p='20px'
           boxShadow='0 0 8px rgb(0 0 0 / 30%)'
           zIndex={69}
-          bg='white'>
+          bg='white'
+          className='regiser__form'>
           <Flex mt={'15px'} justifyContent='space-between'>
             <Box>
               <Text

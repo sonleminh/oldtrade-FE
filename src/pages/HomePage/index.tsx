@@ -21,6 +21,7 @@ import { getAllPost } from '../../Redux/slice/postSlice';
 
 import PostCard from '../../components/PostCard';
 import Banner from '../../components/Banner';
+import './HomePage.styles.scss';
 
 const Homepage = () => {
   const [postList, setPostList] = useState<any>();
@@ -99,11 +100,19 @@ const Homepage = () => {
   ];
 
   return (
-    <Box bg={'#f4f4f4'}>
-      <Container w={'960px'} m='0 auto'>
+    <Box className='wrapper' bg={'#f4f4f4'} overflow='hidden'>
+      <Container className='container' w={'960px'} m='0 auto'>
+        {/* <Container
+        w={{
+          base: '100%', md: ''
+        }}
+        m='0 auto'> */}
         <Box bg={'white'} p='12px' mb='10px'>
           <Banner />
-          <Flex mt={'10px'} justifyContent={'space-around'}>
+          <Flex
+            mt={'10px'}
+            justifyContent={'space-around'}
+            className='header__category'>
             {headerCategory.map((item, index) => (
               <Box key={index} textAlign={'center'}>
                 <Image
@@ -121,8 +130,8 @@ const Homepage = () => {
         <Box mb='10px' bg={'white'} textAlign={'center'}>
           <Text
             p={'15px'}
+            marginBottom={{ base: '15px', md: '30px' }}
             textAlign={'start'}
-            color='rgb(34, 34, 34)'
             fontSize='17px'
             fontWeight={'700'}>
             Khám phá danh mục
@@ -130,7 +139,7 @@ const Homepage = () => {
           <Grid templateColumns='repeat(7, 2fr)' gap={6}></Grid>
 
           {category ? (
-            <Grid templateColumns='repeat(7, 2fr)' gap={6}>
+            <Grid templateColumns='repeat(7, 2fr)' gap={6} className='category'>
               {category.map((item: any, index: number) => (
                 <Link key={index} to={`danh-muc/${item.slug}`}>
                   <GridItem key={index} w='100%'>
@@ -226,7 +235,7 @@ const Homepage = () => {
             Tin đăng mới
           </Text>
           {postList ? (
-            <Grid templateColumns='repeat(5, 1fr)'>
+            <Grid className='post'>
               {postList?.map((item: any, index: number) => (
                 <GridItem key={index} w='100%'>
                   <PostCard item={item} />

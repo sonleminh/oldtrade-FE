@@ -10,13 +10,18 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { FaFacebookSquare, FaYoutubeSquare, FaLinkedin } from 'react-icons/fa';
+import './Footer.styles.scss';
 
 const Footer = () => {
   return (
-    <Box borderTop={'2px solid #F4F4F4'}>
+    <Box borderTop={'2px solid #F4F4F4'} overflow='hidden'>
       <Container w={'960px'} m='15px auto 0 auto' p='0 12px'>
-        <Grid templateColumns='repeat(4, 1fr)' gap={6} textAlign={'start'}>
-          <GridItem>
+        <Grid
+          // templateColumns='repeat(4, 1fr)'
+          gap={6}
+          textAlign={'start'}
+          className='footer__list'>
+          <GridItem className='footer__list-item'>
             <Text
               my={'15px'}
               textTransform={'uppercase'}
@@ -30,7 +35,7 @@ const Footer = () => {
                 src={require('../../../assets/image/chotot_qr.webp')}
                 boxSize={'80px'}
               />
-              <Box ml={'10px'}>
+              <Box ml={'10px'} className='wrap__app'>
                 <Image
                   src={require('../../../assets/image/ios-tag.svg').default}
                   w={'100px'}

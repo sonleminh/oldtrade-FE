@@ -6,12 +6,12 @@ import { Box } from '@chakra-ui/react';
 
 const DefaultLayout = () => {
   return (
-    <div>
+    <Box position={'relative'}>
       <Header />
       <Box h='100px'></Box>
       <Outlet />
       <Footer />
-    </div>
+    </Box>
   );
 };
 

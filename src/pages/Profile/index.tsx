@@ -22,6 +22,7 @@ import { Field, Formik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import '../UserPost/UserPost.styles.scss';
+import './Profile.styles.scss';
 
 import axiosClient from '../../api/axiosClient';
 import { getUserApi, deletePostApi, updateUser } from '../../Redux/apiRequest';
@@ -156,7 +157,7 @@ const Profile: React.FC<Props> = (props) => {
   };
   return (
     <Box bg='#f4f4f4' p='15px 0 35px 0'>
-      <Container w='990px' m='0 auto'>
+      <Container w='990px' m='0 auto' className='container'>
         <Breadcrumb my='10px' fontSize={'13px'} separator='-'>
           <BreadcrumbItem>
             <Link to='/'>Trang chủ</Link>

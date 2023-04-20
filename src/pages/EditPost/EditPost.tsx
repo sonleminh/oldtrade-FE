@@ -21,6 +21,7 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import '../Post/Post.styles.scss';
 import { SyncLoader } from 'react-spinners';
+import './EditPost.styles.scss';
 
 import axiosClient from '../../api/axiosClient';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -166,7 +167,7 @@ const EditPostForm: React.FC<Props> = (props) => {
 
   return (
     <Box bg='#f4f4f4' p='15px 0 35px 0'>
-      <Container w='990px' m='0 auto'>
+      <Container w='990px' m='0 auto' className='container'>
         <Breadcrumb my='10px' fontSize={'13px'} separator='-'>
           <BreadcrumbItem>
             <Link to='/'>Trang chủ</Link>
@@ -180,12 +181,16 @@ const EditPostForm: React.FC<Props> = (props) => {
             templateColumns='repeat(6, 1fr)'
             gap={0}
             py='30px'
-            textAlign={'start'}>
-            <GridItem colSpan={2} px='15px'>
+            textAlign={'start'}
+            className='main__grid'>
+            <GridItem colSpan={2} px='15px' className='main__grid--image'>
               <Text mb='15px' color='#222' fontWeight={700}>
                 Ảnh / video sản phẩm
               </Text>
-              <Grid templateColumns='repeat(3, 1fr)' gap={15}>
+              <Grid
+                templateColumns='repeat(3, 1fr)'
+                gap={15}
+                className='main__grid--image-item'>
                 <GridItem colSpan={1} overflow='hidden'>
                   <Input
                     className='custom-file-input'
@@ -202,7 +207,8 @@ const EditPostForm: React.FC<Props> = (props) => {
                       m='auto 2px'
                       border={'1px solid #ddd'}
                       justifyContent='center'
-                      alignItems={'center'}>
+                      alignItems={'center'}
+                      className='wrapper__image'>
                       <Image
                         src={item}
                         alt='image'
@@ -232,7 +238,7 @@ const EditPostForm: React.FC<Props> = (props) => {
                 ))}
               </Grid>
             </GridItem>
-            <GridItem colSpan={4} px='30px'>
+            <GridItem colSpan={4} px='30px' className='main__grid--form'>
               <Formik
                 initialValues={post}
                 validationSchema={validationSchema}

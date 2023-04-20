@@ -19,6 +19,7 @@ import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { Link, useNavigate } from 'react-router-dom';
+import './Login.styles.scss';
 
 import { useAppDispatch, useAppSelector } from '../../../Redux/hooks';
 import { login } from '../../../Redux/slice/userSlice';
@@ -31,13 +32,6 @@ interface Values {
   email: string;
   password: String;
 }
-
-const validationSchema = Yup.object().shape({
-  email: Yup.string().email().required('Email is required!'),
-  password: Yup.string()
-    .min(6, 'Must be more than 6 characters')
-    .required('Password is required!'),
-});
 
 const Login = () => {
   const load = useAppSelector((state) => state.loading.value);
@@ -101,13 +95,23 @@ const Login = () => {
     }
   };
 
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email().required('Email is required!'),
+    password: Yup.string()
+      .min(6, 'Must be more than 6 characters')
+      .required('Password is required!'),
+  });
   return (
     <Box
       backgroundImage={`url(${BACKGROUND})`}
       bgPosition={'bottom'}
       bgSize='50% auto'
       bgRepeat={'no-repeat'}>
-      <Container w={'936px'} m='15px auto 0 auto' p='0 12px'>
+      <Container
+        w={'936px'}
+        m='15px auto 0 auto'
+        p='0 12px'
+        className='container'>
         <Breadcrumb fontSize={'13px'} separator='-'>
           <BreadcrumbItem>
             <BreadcrumbLink href='/'>Trang chủ</BreadcrumbLink>
@@ -123,7 +127,8 @@ const Login = () => {
           p='20px'
           boxShadow='0 0 8px rgb(0 0 0 / 30%)'
           zIndex={69}
-          bg='white'>
+          bg='white'
+          className='login__form'>
           <Flex mt={'15px'} justifyContent='space-between'>
             <Box>
               <Text

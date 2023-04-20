@@ -81,7 +81,7 @@ const PostDetail: React.FC<Props> = (props) => {
 
   return (
     <Box bg='#f4f4f4' pb='35px'>
-      <Container w='990px' m='0 auto'>
+      <Container w='990px' m='0 auto' className='container'>
         <Box bg='white' p='25px 0 25px 25px'>
           <Breadcrumb m='5px 0 25px 0' fontSize={'13px'} separator='-'>
             <BreadcrumbItem>
@@ -91,7 +91,7 @@ const PostDetail: React.FC<Props> = (props) => {
               <Text>Tin</Text>
             </BreadcrumbItem>
           </Breadcrumb>
-          <Grid templateColumns='repeat(6, 1fr)' gap={0}>
+          <Grid templateColumns='repeat(6, 1fr)' gap={0} className='main__grid'>
             <GridItem colSpan={4}>
               <Slider {...settings}>
                 {post.image?.map((item: any, index: number) => (

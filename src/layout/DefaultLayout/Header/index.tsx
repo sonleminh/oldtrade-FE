@@ -24,8 +24,11 @@ import {
   FaRegEdit,
   FaSearch,
   FaCaretDown,
+  FaBars,
+  FaTimes,
 } from 'react-icons/fa';
 import { BiLogOut } from 'react-icons/bi';
+import './Header.styles.scss';
 
 import { useAppDispatch, useAppSelector } from '../../../Redux/hooks';
 import { logout } from '../../../Redux/slice/userSlice';
@@ -36,6 +39,7 @@ const Header = () => {
   const user = useAppSelector((state) => state.user);
   const posts = useAppSelector((state) => state.post.postList);
   const [show, setShow] = useState<boolean>(false);
+  const [showBar, setShowBar] = useState<boolean>(false);
   const [showSearchResult, setShowSearchResult] = useState<boolean>(false);
   const [searchResult, setSearchResult] = useState<any>();
 
@@ -45,6 +49,10 @@ const Header = () => {
 
   let searchRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   let menuRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+
+  useEffect(() => {
+    setShowBar(false);
+  }, [window.location.href]);
 
   useEffect(() => {
     let handle = (e: any) => {
@@ -86,19 +94,20 @@ const Header = () => {
   };
 
   return (
-    <div>
-      <Box position={'fixed'} top='0' w='100%' bg={'#5cc560'} zIndex='69'>
-        <Container w={'960px'} m='0 auto' p='0 12px'>
+    <Box position={'fixed'} top='0' w={'100vw'} zIndex='69'>
+      <Box bg={'#5cc560'} className='wrapper'>
+        <Container maxW={'960px'} m='0 auto' p='0 12px' className='container'>
           <VStack spacing={0}>
             <HStack
               w={'100%'}
               h={'52px'}
               justifyContent='space-between'
-              alignItems={'center'}>
+              alignItems={'center'}
+              className='logo__wrapper'>
               <Link to='/'>
                 <Image src={LOGO} w='100px' />
               </Link>
-              <Flex gap={'30px'}>
+              <Flex gap={'30px'} className='header__link'>
                 <Link to='/'>
                   <Flex
                     color={'white'}
@@ -234,7 +243,11 @@ const Header = () => {
                 </Flex>
               </Flex>
             </HStack>
-            <HStack w='100%' h='48px' alignItems={'start'}>
+            <HStack
+              w='100%'
+              h='48px'
+              alignItems={'start'}
+              className='header__list'>
               <InputGroup alignItems={'center'} ref={searchRef}>
                 <Input
                   variant='unstyled'
@@ -309,7 +322,9 @@ const Header = () => {
                   )}
                 </Box>
               </InputGroup>
-              <Link to={!user.name ? 'login' : 'dang-tin'}>
+              <Link
+                to={!user.name ? 'login' : 'dang-tin'}
+                className='header__list-link'>
                 <Button
                   leftIcon={<FaRegEdit fontSize={'20px'} />}
                   h='36px'
@@ -321,11 +336,116 @@ const Header = () => {
                   <Text pt='3px'>ĐĂNG TIN</Text>
                 </Button>
               </Link>
+              <Box
+                onClick={() => setShowBar(!showBar)}
+                color={'white'}
+                className='mobile__bar'>
+                <FaBars fontSize={'24px'} />
+              </Box>
+              {showBar ? (
+                <Box>
+                  <Box
+                    position={'fixed'}
+                    top='0'
+                    right='0'
+                    w='150px'
+                    h='100vh'
+                    bg='white'
+                    zIndex={69}>
+                    <Box>
+                      <Box w='100%' bg='var(--primary)'>
+                        <Box
+                          onClick={() => setShowBar(!showBar)}
+                          position='absolute'
+                          top={'7px'}
+                          left='7px'>
+                          <FaTimes fontSize={'22px'} color='white' />
+                        </Box>
+                        <Image
+                          src={LOGO}
+                          w='100%'
+                          p='10px 20px'
+                          mt='30px'
+                          textAlign={'center'}
+                        />
+                      </Box>
+                      <UnorderedList
+                        p='15px'
+                        m='0'
+                        listStyleType={'none'}
+                        color='black'>
+                        {/* <ListItem py='5px'>Username</ListItem> */}
+                        <ListItem py='5px'>
+                          <Flex alignItems={'center'}>
+                            {!user.name ? (
+                              <Link
+                                to='/login'
+                                onClick={() => setShowBar(!showBar)}
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                }}>
+                                <Flex
+                                  alignItems={'center'}
+                                  _hover={{
+                                    opacity: 0.6,
+                                  }}>
+                                  <Text>Đăng nhập</Text>
+                                </Flex>
+                              </Link>
+                            ) : (
+                              <Link to='/profile'>
+                                <Flex
+                                  alignItems={'center'}
+                                  position='relative'
+                                  cursor={'pointer'}
+                                  onClick={() => setShow(!show)}>
+                                  <Icon
+                                    as={FaUserCircle}
+                                    mr='10px'
+                                    fontSize='22px'
+                                  />
+                                  <Text mr='5px'>{user.name}</Text>
+                                </Flex>
+                              </Link>
+                            )}
+                          </Flex>
+                        </ListItem>
+                        <Link to='/quan-ly-tin' onClick={() => setShow(!show)}>
+                          <ListItem py='5px'>Quản lý tin</ListItem>
+                        </Link>
+                        <Link to='/chat' onClick={() => setShow(!show)}>
+                          <ListItem py='5px'>Chat</ListItem>
+                        </Link>
+
+                        {!user.name ? (
+                          <></>
+                        ) : (
+                          <ListItem onClick={handleLogout}>
+                            <Text mr='5px'>Đăng xuất</Text>
+                          </ListItem>
+                        )}
+                      </UnorderedList>
+                    </Box>
+                  </Box>
+                  <Box
+                    onClick={() => setShowBar(!showBar)}
+                    position={'fixed'}
+                    top='0'
+                    right='0'
+                    bottom='0'
+                    left='0'
+                    zIndex='68'
+                    bg='rgba(0,0,0,0.5)'></Box>
+                </Box>
+              ) : (
+                <></>
+              )}
             </HStack>
           </VStack>
         </Container>
       </Box>
-    </div>
+    </Box>
   );
 };
 
