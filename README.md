@@ -8,7 +8,7 @@ Clone chotot.com website using TypeScript with React, MongoDB, Chakra UI, Socket
 - Post, edit, delete post
 - Chat with other people
 <h3>Homepage:</h3>
-![oldtrade](https://github.com/sonleminh/oldtrade-FE/assets/88931957/f58079d0-fc83-42de-98ed-b1c0d76310c3)
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/88931957/242600121-f58079d0-fc83-42de-98ed-b1c0d76310c3.png" alt="" />
 <h3>Homepage:</h3>
 ![oldtrade-2](https://github.com/sonleminh/oldtrade-FE/assets/88931957/82bcaa98-6019-4e63-bd7b-b76937db993a)
 ![oldtrade-3](https://github.com/sonleminh/oldtrade-FE/assets/88931957/aaa1c428-19ae-43f3-ad1b-822e53718538)
