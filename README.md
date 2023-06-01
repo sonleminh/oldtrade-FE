@@ -16,11 +16,23 @@ Clone chotot.com website using TypeScript with React, MongoDB, Chakra UI, Socket
 
 <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/88931957/242599063-82bcaa98-6019-4e63-bd7b-b76937db993a.png" alt="" />
 
-<img src="[https://github-production-user-asset-6210df.s3.amazonaws.com/88931957/242599063-82bcaa98-6019-4e63-bd7b-b76937db993a.png](https://github.com/sonleminh/oldtrade-FE/assets/88931957/82bcaa98-6019-4e63-bd7b-b76937db993a)" alt="" />
+<h3>Post Detail:</h3>
 
 ![oldtrade-2](https://github.com/sonleminh/oldtrade-FE/assets/88931957/82bcaa98-6019-4e63-bd7b-b76937db993a)
+
+<h3>Login:</h3>
+
 ![oldtrade-3](https://github.com/sonleminh/oldtrade-FE/assets/88931957/aaa1c428-19ae-43f3-ad1b-822e53718538)
+
+<h3>Upload a post:</h3>
+
 ![oldtrade-4](https://github.com/sonleminh/oldtrade-FE/assets/88931957/49d8e091-3b9f-4f2d-8755-03ebe48e7700)
+
+<h3>Manage posts:</h3>
+
 ![oldtrade-5](https://github.com/sonleminh/oldtrade-FE/assets/88931957/d4d9f328-7d9e-4bed-b67d-10a9798f5b18)
+
+<h3>Chat with orther people:</h3>
+
 ![oldtrade-6](https://github.com/sonleminh/oldtrade-FE/assets/88931957/64440284-61e5-4811-9dd9-92d318eafdda)
 
